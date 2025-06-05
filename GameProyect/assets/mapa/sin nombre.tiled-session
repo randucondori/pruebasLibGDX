@@ -1,0 +1,57 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "sin nombre.tmx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "fileStates": {
+        "#TODOPorAhroa": {
+            "scaleInDock": 1
+        },
+        "C:/Users/Usuarie/OneDrive/Documentos/maze/sin nombre.tmx": {
+            "scale": 0.33,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 1590.909090909091,
+                "y": 1409.0909090909092
+            }
+        },
+        "C:/Users/Usuarie/OneDrive/Documentos/maze/sin nombre.tmx#TODOPorAhroa": {
+            "scaleInDock": 1
+        },
+        "TODOPorAhroa.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "sin nombre.tmx": {
+            "scale": 0.75,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 560,
+                "y": 438.66666666666674
+            }
+        }
+    },
+    "last.imagePath": "C:/Users/Usuarie/Downloads",
+    "map.height": 25,
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 32,
+    "map.tileWidth": 32,
+    "map.width": 25,
+    "openFiles": [
+        "TODOPorAhroa.tsx",
+        "sin nombre.tmx"
+    ],
+    "project": "sin nombre.tiled-project",
+    "recentFiles": [
+        "TODOPorAhroa.tsx",
+        "sin nombre.tmx",
+        "C:/Users/Usuarie/OneDrive/Documentos/maze/sin nombre.tmx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.margin": 1,
+    "tileset.spacing": 1
+}
