@@ -25,8 +25,8 @@ public class Main extends ApplicationAdapter {
     // Jugador
     private Rectangle jugador;
     private float velocidad = 200f;
-    private final float ANCHO_PERSONAJE = 30f;
-    private final float ALTO_PERSONAJE = 30f;
+    private final float ANCHO_PERSONAJE = 25f;
+    private final float ALTO_PERSONAJE = 25f;
 
     // Mapa
     private Laverinto laverinto;
