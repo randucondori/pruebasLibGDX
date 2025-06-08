@@ -135,7 +135,7 @@ public class Main extends ApplicationAdapter {
             laverinto.pintarFondo(batch, mapaAncho, mapaAlto);
             batch.begin();
             // Actualizar
-            actualizarMovimiento(Gdx.graphics.getDeltaTime() * 5f);
+            actualizarMovimiento(Gdx.graphics.getDeltaTime() * 2f);
             actualizarCamara();
             if (cambioDeAnimacion()) {
                 tiempo += Gdx.graphics.getDeltaTime();
