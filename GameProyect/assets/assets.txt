@@ -1,0 +1,11 @@
+logo/121.jpg
+logo/descarga.jpg
+logo/libgdx.png
+logo/maze.png
+mapa/TODOPorAhroa.tsx
+mapa/mapa.png
+mapa/mapa.tmx
+mapa/pixil-frame-0.png
+mapa/sin nombre.tiled-project
+mapa/sin nombre.tiled-session
+musica/isha.mp3
