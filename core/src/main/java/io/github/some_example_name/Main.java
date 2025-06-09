@@ -22,7 +22,7 @@ public class Main extends ApplicationAdapter {
     private Personaje jugador;
     private final float ANCHO_PERSONAJE = 25f;
     private final float ALTO_PERSONAJE = 25f;
-    private final float velocidad = 200f;
+    private final float velocidad = 100f;
 
     private Laverinto laverinto;
     private ArrayList<Muro> muros;

@@ -36,7 +36,7 @@ public class Personaje implements Disposable {
     private void crearAnimacion() {
         int columnas = 3;
         int filas = 1;
-        
+
         TextureRegion[][] regiones = TextureRegion.split(
             playerTexture,
             playerTexture.getWidth() / columnas,
@@ -106,15 +106,12 @@ public class Personaje implements Disposable {
     public void setMoviendoArriba(boolean estado) {
         this.moviendoArriba = estado;
     }
-
     public void setMoviendoAbajo(boolean estado) {
         this.moviendoAbajo = estado;
     }
-
     public void setMoviendoIzquierda(boolean estado) {
         this.moviendoIzquierda = estado;
     }
-
     public void setMoviendoDerecha(boolean estado) {
         this.moviendoDerecha = estado;
     }
