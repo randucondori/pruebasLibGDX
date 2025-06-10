@@ -40,7 +40,7 @@ public class Main extends ApplicationAdapter {
     private Sprite boton2sprite;
     private boolean inicio;
 
-    private Enemigo enemigo;
+    private Enemigo[] enemigos = new Enemigo[4];
 
     @Override
     public void create() {
@@ -58,7 +58,10 @@ public class Main extends ApplicationAdapter {
         boton1sprite = new Sprite(botonInicio);
         boton2sprite = new Sprite(botonFin);
 
-        enemigo = new Enemigo(0,0);
+        enemigos[0] = new Enemigo(0,0);
+        enemigos[1] = new Enemigo(0,mapaAlto);
+        enemigos[2] = new Enemigo(mapaAncho,0);
+        enemigos[3] = new Enemigo(mapaAncho,mapaAlto);
 
         jugador = new Personaje(
             (mapaAncho - ANCHO_PERSONAJE) / 2,
@@ -95,19 +98,31 @@ public class Main extends ApplicationAdapter {
 
         if (pantallaInicio()) {
             this.menu();
-            if (this.inicio) {
+            if (this.inicio && jugador.vida != 0) {
                 batch.setProjectionMatrix(camera.combined);
                 laverinto.pintarFondo(batch, mapaAncho, mapaAlto);
-
                 batch.begin();
-
+                for (Enemigo enemigo : enemigos) {
+                    if (enemigo.reconocerArea(mapaAncho, mapaAlto, jugador)) {
+                        jugador.rect.x=(mapaAncho - ANCHO_PERSONAJE) / 2;
+                        jugador.rect.y=(mapaAlto - ALTO_PERSONAJE) / 2;
+                        enemigos[0] = new Enemigo(0,0);
+                        enemigos[1] = new Enemigo(0,mapaAlto);
+                        enemigos[2] = new Enemigo(mapaAncho,0);
+                        enemigos[3] = new Enemigo(mapaAncho,mapaAlto);
+                        System.out.println(jugador.vida);
+                    }
+                    enemigo.pintarEnemigo(batch);
+                    enemigo.reconocerArea(mapaAncho, mapaAlto, jugador);
+                }
+                System.out.println(enemigos[3].objetivo_x+" "+enemigos[3].objetivo_y);
+                System.out.println(enemigos[3].x+" "+enemigos[3].y);
                 jugador.actualizarMovimiento(Gdx.graphics.getDeltaTime() * 2f, muros, mapaAncho, mapaAlto);
                 jugador.dibujar(batch, Gdx.graphics.getDeltaTime());
-                enemigo.pintarEnemigo(batch);
-                enemigo.reconocerArea(mapaAncho,mapaAlto,jugador);
-                enemigo.mover();
                 batch.end();
                 actualizarCamara();
+            }else if (jugador.vida == 0) {
+                dispose();
             }
         }
     }
@@ -216,5 +231,7 @@ public class Main extends ApplicationAdapter {
         camera.viewportHeight = height;
         camera.update();
     }
+
+
 }
 
