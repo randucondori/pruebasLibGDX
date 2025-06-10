@@ -12,6 +12,11 @@ public class Laverinto {
     private Texture texture = new Texture("imagenes/mapa.png");
     private Texture salida = new Texture(Gdx.files.internal("imagenes/puerta.png"));
     private Rectangle rectsalida = new Rectangle();
+    private Enemigo enemigo =  new Enemigo(0,0);
+
+    public Enemigo getEnemigo() {
+        return enemigo;
+    }
 
     public ArrayList<Muro> Muros() {
         //muros

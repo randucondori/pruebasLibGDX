@@ -3,18 +3,20 @@ package io.github.some_example_name;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Disposable;
 
 public class Personaje implements Disposable {
-    private Rectangle rect;
+    public Rectangle rect;
     private float velocidad;
     private Texture playerTexture;
     private Animation<TextureRegion> animacion;
     private TextureRegion jugadorframe;
     private float tiempo;
     private boolean moviendoArriba, moviendoAbajo, moviendoIzquierda, moviendoDerecha;
+    public Circle area_jugador;
 
     private final float ancho;
     private final float alto;
@@ -24,7 +26,9 @@ public class Personaje implements Disposable {
         this.alto = alto;
         this.velocidad = velocidad;
         this.playerTexture = texturaInicial;
-
+        this.area_jugador = new Circle();
+        this.area_jugador.setPosition(x+ancho/2, y+alto/2);
+        this.area_jugador.setRadius(ancho*2);
         rect = new Rectangle(x, y, ancho, alto);
         tiempo = 0f;
         crearAnimacion();
@@ -65,18 +69,20 @@ public class Personaje implements Disposable {
         if (moviendoIzquierda) rect.x -= velocidad * delta;
         if (moviendoDerecha) rect.x += velocidad * delta;
 
-        for (Muro m : muros) {
+        /*for (Muro m : muros) {
             if (rect.overlaps(m.getRectangle())) {
                 rect.x = oldX;
                 rect.y = oldY;
                 System.out.println("tocaste un muro");
                 break;
             }
-        }
+        }*/
 
         // Limitar a mapa
         rect.x = MathUtils.clamp(rect.x, 0, mapaAncho - rect.width);
         rect.y = MathUtils.clamp(rect.y, 0, mapaAlto - rect.height);
+        area_jugador.setPosition(rect.x+ancho/2, rect.y+alto/2);
+
     }
 
     public void dibujar(com.badlogic.gdx.graphics.g2d.SpriteBatch batch, float delta) {
