@@ -26,6 +26,7 @@ public class Main extends ApplicationAdapter {
 
     private Laverinto laverinto;
     private ArrayList<Muro> muros;
+    private ArrayList<Llave> llaves = new ArrayList<>();
     private float mapaAncho = 2000;
     private float mapaAlto = 2000;
     private Vector3 objetivoCamara;
@@ -58,10 +59,10 @@ public class Main extends ApplicationAdapter {
         boton1sprite = new Sprite(botonInicio);
         boton2sprite = new Sprite(botonFin);
 
-        enemigos[0] = new Enemigo(0,0);
-        enemigos[1] = new Enemigo(0,mapaAlto);
-        enemigos[2] = new Enemigo(mapaAncho,0);
-        enemigos[3] = new Enemigo(mapaAncho,mapaAlto);
+        enemigos[0] = new Enemigo(0, 0);
+        enemigos[1] = new Enemigo(0, mapaAlto);
+        enemigos[2] = new Enemigo(mapaAncho, 0);
+        enemigos[3] = new Enemigo(mapaAncho, mapaAlto);
 
         jugador = new Personaje(
             (mapaAncho - ANCHO_PERSONAJE) / 2,
@@ -74,6 +75,7 @@ public class Main extends ApplicationAdapter {
 
         laverinto = new Laverinto();
         muros = laverinto.Muros();
+        llaves = laverinto.llaves();
 
         configurarControles();
         actualizarCamara();
@@ -81,11 +83,11 @@ public class Main extends ApplicationAdapter {
 
     private void menu() {
         if (Gdx.input.isTouched()) {
-            if ((float)Gdx.input.getX() > this.boton1sprite.getX() && (float)Gdx.input.getX() < this.boton1sprite.getX() + this.boton1sprite.getWidth() && (float)Gdx.input.getY() < (float)Gdx.graphics.getHeight() - this.boton1sprite.getHeight() && (float)Gdx.input.getY() > (float)Gdx.graphics.getHeight() - this.boton1sprite.getY() - this.boton1sprite.getHeight()) {
+            if ((float) Gdx.input.getX() > this.boton1sprite.getX() && (float) Gdx.input.getX() < this.boton1sprite.getX() + this.boton1sprite.getWidth() && (float) Gdx.input.getY() < (float) Gdx.graphics.getHeight() - this.boton1sprite.getHeight() && (float) Gdx.input.getY() > (float) Gdx.graphics.getHeight() - this.boton1sprite.getY() - this.boton1sprite.getHeight()) {
                 this.inicio = true;
             }
 
-            if ((float)Gdx.input.getX() > this.boton2sprite.getX() && (float)Gdx.input.getX() < this.boton2sprite.getX() + this.boton2sprite.getWidth() && (float)Gdx.input.getY() < (float)Gdx.graphics.getHeight() - this.boton2sprite.getHeight() && (float)Gdx.input.getY() > (float)Gdx.graphics.getHeight() - this.boton2sprite.getY() - this.boton2sprite.getHeight()) {
+            if ((float) Gdx.input.getX() > this.boton2sprite.getX() && (float) Gdx.input.getX() < this.boton2sprite.getX() + this.boton2sprite.getWidth() && (float) Gdx.input.getY() < (float) Gdx.graphics.getHeight() - this.boton2sprite.getHeight() && (float) Gdx.input.getY() > (float) Gdx.graphics.getHeight() - this.boton2sprite.getY() - this.boton2sprite.getHeight()) {
                 this.dispose();
             }
         }
@@ -105,24 +107,34 @@ public class Main extends ApplicationAdapter {
                 batch.begin();
                 for (Enemigo enemigo : enemigos) {
                     if (enemigo.reconocerArea(mapaAncho, mapaAlto, jugador)) {
-                        jugador.rect.x=(mapaAncho - ANCHO_PERSONAJE) / 2;
-                        jugador.rect.y=(mapaAlto - ALTO_PERSONAJE) / 2;
-                        enemigos[0] = new Enemigo(0,0);
-                        enemigos[1] = new Enemigo(0,mapaAlto);
-                        enemigos[2] = new Enemigo(mapaAncho,0);
-                        enemigos[3] = new Enemigo(mapaAncho,mapaAlto);
+                        jugador.rect.x = (mapaAncho - ANCHO_PERSONAJE) / 2;
+                        jugador.rect.y = (mapaAlto - ALTO_PERSONAJE) / 2;
+                        enemigos[0] = new Enemigo(0, 0);
+                        enemigos[1] = new Enemigo(0, mapaAlto);
+                        enemigos[2] = new Enemigo(mapaAncho, 0);
+                        enemigos[3] = new Enemigo(mapaAncho, mapaAlto);
                         System.out.println(jugador.vida);
                     }
                     enemigo.pintarEnemigo(batch);
                     enemigo.reconocerArea(mapaAncho, mapaAlto, jugador);
                 }
-                System.out.println(enemigos[3].objetivo_x+" "+enemigos[3].objetivo_y);
-                System.out.println(enemigos[3].x+" "+enemigos[3].y);
                 jugador.actualizarMovimiento(Gdx.graphics.getDeltaTime() * 2f, muros, mapaAncho, mapaAlto);
                 jugador.dibujar(batch, Gdx.graphics.getDeltaTime());
+
+                Llave eliminarLlave=null;
+                for (Llave l : llaves) {
+                    l.pintarLlave(batch);
+                    if (l.recogerLlave(jugador)){
+                        eliminarLlave = l;
+                        System.out.println(jugador.llaves);
+                    }
+                }
+                if(eliminarLlave!=null){
+                    laverinto.delLlave(eliminarLlave);
+                }
                 batch.end();
                 actualizarCamara();
-            }else if (jugador.vida == 0) {
+            } else if (jugador.vida == 0) {
                 dispose();
             }
         }
@@ -130,13 +142,13 @@ public class Main extends ApplicationAdapter {
 
     private boolean pantallaInicio() {
         this.menusprite = new Sprite(this.pantalladDeInicio);
-        this.menusprite.setSize((float)Gdx.graphics.getWidth(), (float)Gdx.graphics.getHeight());
+        this.menusprite.setSize((float) Gdx.graphics.getWidth(), (float) Gdx.graphics.getHeight());
         this.boton1sprite = new Sprite(this.botonInicio);
         this.boton1sprite.setSize(200.0F, 100.0F);
-        this.boton1sprite.translate((float)Gdx.graphics.getWidth() / 2.0F - this.boton1sprite.getWidth() / 2.0F, 225.0F);
+        this.boton1sprite.translate((float) Gdx.graphics.getWidth() / 2.0F - this.boton1sprite.getWidth() / 2.0F, 225.0F);
         this.boton2sprite = new Sprite(this.botonFin);
         this.boton2sprite.setSize(200.0F, 100.0F);
-        this.boton2sprite.translate((float)Gdx.graphics.getWidth() / 2.0F - this.boton1sprite.getWidth() / 2.0F, 100.0F);
+        this.boton2sprite.translate((float) Gdx.graphics.getWidth() / 2.0F - this.boton1sprite.getWidth() / 2.0F, 100.0F);
         boolean respuesta = false;
         this.batch.begin();
         this.transparencia += 0.01F;

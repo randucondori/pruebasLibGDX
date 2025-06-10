@@ -12,9 +12,10 @@ public class Laverinto {
     private Texture texture = new Texture("imagenes/mapa.png");
     private Texture salida = new Texture(Gdx.files.internal("imagenes/puerta.png"));
     private Rectangle rectsalida = new Rectangle();
-
+    private ArrayList<Llave> llaves = new ArrayList<>();
 
     public ArrayList<Muro> Muros() {
+
         //vertical
         Muro muro2 = new Muro(110, 115, 5, 1750);
         Muro muro3 = new Muro(1875, 115, 5, 1750);
@@ -144,7 +145,6 @@ public class Laverinto {
         Muro muro259 = new Muro(1060, 770, 5, 115);
         Muro muro260 = new Muro(940, 770, 5, 115);
         Muro muro261 = new Muro(1000, 655, 5, 55);
-
 
 
         muros.add(muro141);
@@ -553,27 +553,37 @@ public class Laverinto {
         return muros;
     }
 
+    public ArrayList<Llave> llaves() {
+        //llaves
+        llaves.add(new Llave(500, 500));
+        llaves.add(new Llave(1500, 500));
+        llaves.add(new Llave(500, 1500));
+       llaves.add(new Llave(1500, 1500));
+
+        return llaves;
+    }
+
     public Laverinto() {
     }
 
     public void pintarFondo(SpriteBatch batch, float alto, float ancho) {
+
         batch.begin();
         batch.draw(texture, 0, 0, ancho, alto);
         batch.draw(salida, 970, 100, 100, 40);
         rectsalida.set(970, 100, 80, 20);
         batch.end();
     }
-
-    public Rectangle getRectsalida() {
-        return rectsalida;
-    }
-
-    public Texture getSalida() {
-        return salida;
+    public void delLlave(Llave l){
+        llaves.remove(l);
     }
 
     public void dispoce() {
         texture.dispose();
         salida.dispose();
     }
+
+
+
+
 }

@@ -70,14 +70,14 @@ public class Personaje implements Disposable {
         if (moviendoIzquierda) rect.x -= velocidad * delta;
         if (moviendoDerecha) rect.x += velocidad * delta;
 
-        for (Muro m : muros) {
+        /*for (Muro m : muros) {
             if (rect.overlaps(m.getRectangle())) {
                 rect.x = oldX;
                 rect.y = oldY;
                 System.out.println("tocaste un muro");
                 break;
             }
-        }
+        }*/
 
         // Limitar a mapa
         rect.x = MathUtils.clamp(rect.x, 0, mapaAncho - rect.width);
