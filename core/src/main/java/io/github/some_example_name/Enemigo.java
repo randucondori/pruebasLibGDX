@@ -63,7 +63,6 @@ public class Enemigo {
                 cambiarObjetivo(random.nextInt(0, (int) mapaAncho), random.nextInt(0, (int) mapaAlto));
             }
         } else if (encontrado) {
-
              cambiarObjetivo(jugador.rect.x, jugador.rect.y);
          }
         mover();
