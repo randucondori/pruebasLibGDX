@@ -13,7 +13,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class Main extends ApplicationAdapter {
 
@@ -39,15 +38,13 @@ public class Main extends ApplicationAdapter {
     private Texture botonFin;
     private Sprite boton1sprite;
     private Sprite boton2sprite;
-    private Enemigo enemigo;
-
     private boolean inicio;
-    private Random random = new Random();
+
+    private Enemigo enemigo;
 
     @Override
     public void create() {
         objetivoCamara = new Vector3();
-        enemigo = new Enemigo(0,0);
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -60,6 +57,8 @@ public class Main extends ApplicationAdapter {
         botonFin = new Texture("imagenes/puerta.png");
         boton1sprite = new Sprite(botonInicio);
         boton2sprite = new Sprite(botonFin);
+
+        enemigo = new Enemigo(0,0);
 
         jugador = new Personaje(
             (mapaAncho - ANCHO_PERSONAJE) / 2,
@@ -89,59 +88,55 @@ public class Main extends ApplicationAdapter {
 
     }
 
-
     @Override
     public void render() {
         Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         if (pantallaInicio()) {
-            menu();
-            if (inicio) {
+            this.menu();
+            if (this.inicio) {
                 batch.setProjectionMatrix(camera.combined);
-                laverinto.pintarFondo(this.batch, this.mapaAncho, this.mapaAlto);
+                laverinto.pintarFondo(batch, mapaAncho, mapaAlto);
 
                 batch.begin();
 
                 jugador.actualizarMovimiento(Gdx.graphics.getDeltaTime() * 2f, muros, mapaAncho, mapaAlto);
                 jugador.dibujar(batch, Gdx.graphics.getDeltaTime());
-                batch.end();
-
-                for (Muro muro : muros) {
-                    muro.pintarmuro(batch);
-                }
                 enemigo.pintarEnemigo(batch);
                 enemigo.reconocerArea(mapaAncho,mapaAlto,jugador);
+                enemigo.mover();
+                batch.end();
                 actualizarCamara();
             }
         }
     }
 
-        private boolean pantallaInicio() {
-            this.menusprite = new Sprite(this.pantalladDeInicio);
-            this.menusprite.setSize((float)Gdx.graphics.getWidth(), (float)Gdx.graphics.getHeight());
-            this.boton1sprite = new Sprite(this.botonInicio);
-            this.boton1sprite.setSize(200.0F, 100.0F);
-            this.boton1sprite.translate((float)Gdx.graphics.getWidth() / 2.0F - this.boton1sprite.getWidth() / 2.0F, 225.0F);
-            this.boton2sprite = new Sprite(this.botonFin);
-            this.boton2sprite.setSize(200.0F, 100.0F);
-            this.boton2sprite.translate((float)Gdx.graphics.getWidth() / 2.0F - this.boton1sprite.getWidth() / 2.0F, 100.0F);
-            boolean respuesta = false;
-            this.batch.begin();
-            this.transparencia += 0.01F;
-            if (this.transparencia > 1.0F) {
-                this.transparencia = 1.0F;
-                respuesta = true;
-            }
+    private boolean pantallaInicio() {
+        this.menusprite = new Sprite(this.pantalladDeInicio);
+        this.menusprite.setSize((float)Gdx.graphics.getWidth(), (float)Gdx.graphics.getHeight());
+        this.boton1sprite = new Sprite(this.botonInicio);
+        this.boton1sprite.setSize(200.0F, 100.0F);
+        this.boton1sprite.translate((float)Gdx.graphics.getWidth() / 2.0F - this.boton1sprite.getWidth() / 2.0F, 225.0F);
+        this.boton2sprite = new Sprite(this.botonFin);
+        this.boton2sprite.setSize(200.0F, 100.0F);
+        this.boton2sprite.translate((float)Gdx.graphics.getWidth() / 2.0F - this.boton1sprite.getWidth() / 2.0F, 100.0F);
+        boolean respuesta = false;
+        this.batch.begin();
+        this.transparencia += 0.01F;
+        if (this.transparencia > 1.0F) {
+            this.transparencia = 1.0F;
+            respuesta = true;
+        }
 
-            this.menusprite.setAlpha(this.transparencia);
-            this.boton1sprite.setAlpha(this.transparencia);
-            this.boton2sprite.setAlpha(this.transparencia);
-            this.menusprite.draw(this.batch);
-            this.boton1sprite.draw(this.batch);
-            this.boton2sprite.draw(this.batch);
-            this.batch.end();
-            return respuesta;
+        this.menusprite.setAlpha(this.transparencia);
+        this.boton1sprite.setAlpha(this.transparencia);
+        this.boton2sprite.setAlpha(this.transparencia);
+        this.menusprite.draw(this.batch);
+        this.boton1sprite.draw(this.batch);
+        this.boton2sprite.draw(this.batch);
+        this.batch.end();
+        return respuesta;
     }
 
     private void configurarControles() {

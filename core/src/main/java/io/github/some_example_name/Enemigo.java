@@ -29,39 +29,36 @@ public class Enemigo {
         this.objetivo_y = y;
     }
      void pintarEnemigo(SpriteBatch batch) {
-        batch.begin();
         batch.draw(enemitexture, x, y, ancho, alto);
-        batch.end();
     }
      void mover(){
         if (x != objetivo_x) {
             if (x < objetivo_x) {
-                ++x;
+                x=x+0.5F;
             }
 
             if (x > objetivo_x) {
-                --x;
+                x=x-0.5F;
             }
         }
         if (y != objetivo_y) {
             if (y < objetivo_y) {
-                ++y;
+                y=y+0.5F;
             }
 
             if (y > objetivo_y) {
-                --y;
+                y=y-0.5F;
             }
         }
         this.zonaseguimiento.setPosition(x+ancho/2, y+alto/2);
     }
      void reconocerArea(float mapaAncho,float mapaAlto,Personaje jugador) {
         boolean encontrado = zonaseguimiento.overlaps(jugador.area_jugador);
-
         if(!encontrado) {
             if (x == (int)objetivo_x && y == (int)objetivo_y) {
                 cambiarObjetivo(random.nextInt(0, (int) mapaAncho), random.nextInt(0, (int) mapaAlto));
             }
-        } else if (encontrado) {
+        } else{
              cambiarObjetivo(jugador.rect.x, jugador.rect.y);
          }
         mover();
