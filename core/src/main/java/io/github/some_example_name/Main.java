@@ -53,7 +53,7 @@ public class Main extends ApplicationAdapter {
         batch = new SpriteBatch();
 
         Texture texturaJugador = new Texture(Gdx.files.internal("imagenes/player.png"));
-        pantalladDeInicio = new Texture("mapa/maps.png");
+        pantalladDeInicio = new Texture("imagenes/Pantalla de Inicio.png");
         botonInicio = new Texture("imagenes/puerta.png");
         botonFin = new Texture("imagenes/puerta.png");
         boton1sprite = new Sprite(botonInicio);
