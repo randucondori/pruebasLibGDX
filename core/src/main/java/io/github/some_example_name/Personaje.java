@@ -21,14 +21,16 @@ public class Personaje implements Disposable {
     private final float ancho;
     private final float alto;
 
+    public int vida = 3, llaves;
+
     public Personaje(float x, float y, float ancho, float alto, float velocidad, Texture texturaInicial) {
         this.ancho = ancho;
         this.alto = alto;
         this.velocidad = velocidad;
         this.playerTexture = texturaInicial;
         this.area_jugador = new Circle();
-        this.area_jugador.setPosition(x+ancho/2, y+alto/2);
-        this.area_jugador.setRadius(ancho*2);
+        this.area_jugador.setPosition(x + ancho / 2, y + alto / 2);
+        this.area_jugador.setRadius(ancho * 2);
         rect = new Rectangle(x, y, ancho, alto);
         tiempo = 0f;
         crearAnimacion();
@@ -42,9 +44,9 @@ public class Personaje implements Disposable {
         int filas = 1;
 
         TextureRegion[][] regiones = TextureRegion.split(
-            playerTexture,
-            playerTexture.getWidth() / columnas,
-            playerTexture.getHeight() / filas
+                playerTexture,
+                playerTexture.getWidth() / columnas,
+                playerTexture.getHeight() / filas
         );
 
         if (regiones.length < 1 || regiones[0].length < columnas) {
@@ -58,7 +60,6 @@ public class Personaje implements Disposable {
 
         animacion = new Animation<>(0.5f, frames);
     }
-
 
     public void actualizarMovimiento(float delta, Iterable<Muro> muros, float mapaAncho, float mapaAlto) {
         float oldX = rect.x;
@@ -81,7 +82,7 @@ public class Personaje implements Disposable {
         // Limitar a mapa
         rect.x = MathUtils.clamp(rect.x, 0, mapaAncho - rect.width);
         rect.y = MathUtils.clamp(rect.y, 0, mapaAlto - rect.height);
-        area_jugador.setPosition(rect.x+ancho/2, rect.y+alto/2);
+        area_jugador.setPosition(rect.x + ancho / 2, rect.y + alto / 2);
 
     }
 
@@ -109,19 +110,22 @@ public class Personaje implements Disposable {
     public Rectangle getRect() {
         return rect;
     }
+
     public void setMoviendoArriba(boolean estado) {
         this.moviendoArriba = estado;
     }
+
     public void setMoviendoAbajo(boolean estado) {
         this.moviendoAbajo = estado;
     }
+
     public void setMoviendoIzquierda(boolean estado) {
         this.moviendoIzquierda = estado;
     }
+
     public void setMoviendoDerecha(boolean estado) {
         this.moviendoDerecha = estado;
     }
-
 
     @Override
     public void dispose() {
