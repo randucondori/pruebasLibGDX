@@ -78,6 +78,7 @@ public class Main extends ApplicationAdapter {
         configurarControles();
         actualizarCamara();
     }
+
     private void menu() {
         if (Gdx.input.isTouched()) {
             if ((float)Gdx.input.getX() > this.boton1sprite.getX() && (float)Gdx.input.getX() < this.boton1sprite.getX() + this.boton1sprite.getWidth() && (float)Gdx.input.getY() < (float)Gdx.graphics.getHeight() - this.boton1sprite.getHeight() && (float)Gdx.input.getY() > (float)Gdx.graphics.getHeight() - this.boton1sprite.getY() - this.boton1sprite.getHeight()) {
@@ -231,7 +232,6 @@ public class Main extends ApplicationAdapter {
         camera.viewportHeight = height;
         camera.update();
     }
-
 
 }
 
