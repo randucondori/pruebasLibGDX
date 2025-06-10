@@ -12,7 +12,6 @@ public class Enemigo {
     float x,y,alto,ancho;
     float objetivo_x,objetivo_y = 0;
     Random random = new Random();
-    boolean jugador_encontrado = false;
 
 
     Enemigo(float x,float y) {
@@ -34,7 +33,7 @@ public class Enemigo {
         batch.draw(enemitexture, x, y, ancho, alto);
         batch.end();
     }
-    void mover(){
+     void mover(){
         if (x != objetivo_x) {
             if (x < objetivo_x) {
                 ++x;
