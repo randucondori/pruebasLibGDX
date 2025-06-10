@@ -62,10 +62,12 @@ public class Enemigo {
      boolean reconocerArea(float mapaAncho,float mapaAlto,Personaje jugador) {
         boolean encontrado = zonaseguimiento.overlaps(jugador.area_jugador);
         if(!encontrado) {
+            enemitexture = new Texture("imagenes/enemigo.png");
             if ((int)x == (int)objetivo_x && (int)y == (int)objetivo_y) {
                 cambiarObjetivo(random.nextInt(0, (int) mapaAncho), random.nextInt(0, (int) mapaAlto));
             }
         } else{
+            enemitexture = new Texture("imagenes/enemigo_2.png");
              cambiarObjetivo(jugador.rect.x, jugador.rect.y);
             if (enemigoRect.overlaps(jugador.rect)) {
                 jugador.vida--;

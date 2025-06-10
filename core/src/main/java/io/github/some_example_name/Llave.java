@@ -9,8 +9,8 @@ import com.badlogic.gdx.math.Circle;
 public class Llave {
     private Circle area_para_recoger;
     float x, y;
-    float alto = 20, ancho = 20;
-    Texture textura = new Texture("imagenes/player.png");
+    float alto = 10, ancho = 20;
+    Texture textura = new Texture("imagenes/llave.png");
 
     public Llave(float x, float y) {
         this.x = x;

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class Laverinto {
     private ArrayList<Muro> muros = new ArrayList<>();
-    private Texture texture = new Texture("imagenes/mapa.png");
+    private Texture texture = new Texture("mapa/mapa.jpeg");
     private Texture salida = new Texture(Gdx.files.internal("imagenes/puerta.png"));
     private Rectangle rectsalida = new Rectangle();
     private ArrayList<Llave> llaves = new ArrayList<>();

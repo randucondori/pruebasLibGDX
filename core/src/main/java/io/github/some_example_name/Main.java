@@ -41,6 +41,9 @@ public class Main extends ApplicationAdapter {
     private Sprite boton2sprite;
     private boolean inicio;
 
+    private Texture logo;
+    private Sprite logo_sprite;
+
     private Enemigo[] enemigos = new Enemigo[4];
 
     @Override
@@ -54,10 +57,12 @@ public class Main extends ApplicationAdapter {
 
         Texture texturaJugador = new Texture(Gdx.files.internal("imagenes/player.png"));
         pantalladDeInicio = new Texture("imagenes/Pantalla de Inicio.png");
-        botonInicio = new Texture("imagenes/puerta.png");
-        botonFin = new Texture("imagenes/puerta.png");
+        botonInicio = new Texture("imagenes/boton_inicio.png");
+        botonFin = new Texture("imagenes/boton_salir.png");
         boton1sprite = new Sprite(botonInicio);
         boton2sprite = new Sprite(botonFin);
+        logo = new Texture("imagenes/logo.png");
+        logo_sprite=new Sprite(logo);
 
         enemigos[0] = new Enemigo(0, 0);
         enemigos[1] = new Enemigo(0, mapaAlto);
@@ -83,15 +88,14 @@ public class Main extends ApplicationAdapter {
 
     private void menu() {
         if (Gdx.input.isTouched()) {
-            if ((float) Gdx.input.getX() > this.boton1sprite.getX() && (float) Gdx.input.getX() < this.boton1sprite.getX() + this.boton1sprite.getWidth() && (float) Gdx.input.getY() < (float) Gdx.graphics.getHeight() - this.boton1sprite.getHeight() && (float) Gdx.input.getY() > (float) Gdx.graphics.getHeight() - this.boton1sprite.getY() - this.boton1sprite.getHeight()) {
+            if (Gdx.input.getX() >= this.boton1sprite.getX() && Gdx.input.getX() <= this.boton1sprite.getX() + this.boton1sprite.getWidth() && Gdx.input.getY() <= Gdx.graphics.getHeight() - boton1sprite.getY() && Gdx.input.getY() > (float) Gdx.graphics.getHeight() - this.boton1sprite.getY() - this.boton1sprite.getHeight()) {
                 this.inicio = true;
             }
 
-            if ((float) Gdx.input.getX() > this.boton2sprite.getX() && (float) Gdx.input.getX() < this.boton2sprite.getX() + this.boton2sprite.getWidth() && (float) Gdx.input.getY() < (float) Gdx.graphics.getHeight() - this.boton2sprite.getHeight() && (float) Gdx.input.getY() > (float) Gdx.graphics.getHeight() - this.boton2sprite.getY() - this.boton2sprite.getHeight()) {
+            if (Gdx.input.getX() >= this.boton2sprite.getX() && Gdx.input.getX() <= this.boton2sprite.getX() + this.boton2sprite.getWidth() && Gdx.input.getY() <= Gdx.graphics.getHeight() - boton2sprite.getY() && Gdx.input.getY() > (float) Gdx.graphics.getHeight() - this.boton2sprite.getY() - this.boton2sprite.getHeight()) {
                 this.dispose();
             }
         }
-
     }
 
     @Override
@@ -143,12 +147,15 @@ public class Main extends ApplicationAdapter {
     private boolean pantallaInicio() {
         this.menusprite = new Sprite(this.pantalladDeInicio);
         this.menusprite.setSize((float) Gdx.graphics.getWidth(), (float) Gdx.graphics.getHeight());
+        logo_sprite=new Sprite(logo);
+        this.logo_sprite.setSize(375,175);
+        this.logo_sprite.translate((float) Gdx.graphics.getWidth() / 2.0F - this.logo_sprite.getWidth() / 2.0F, 295.0F);
         this.boton1sprite = new Sprite(this.botonInicio);
         this.boton1sprite.setSize(200.0F, 100.0F);
-        this.boton1sprite.translate((float) Gdx.graphics.getWidth() / 2.0F - this.boton1sprite.getWidth() / 2.0F, 225.0F);
+        this.boton1sprite.translate((float) Gdx.graphics.getWidth() / 2.0F - this.boton1sprite.getWidth() / 2.0F, 150.0F);
         this.boton2sprite = new Sprite(this.botonFin);
         this.boton2sprite.setSize(200.0F, 100.0F);
-        this.boton2sprite.translate((float) Gdx.graphics.getWidth() / 2.0F - this.boton1sprite.getWidth() / 2.0F, 100.0F);
+        this.boton2sprite.translate((float) Gdx.graphics.getWidth() / 2.0F - this.boton1sprite.getWidth() / 2.0F, 25.0F);
         boolean respuesta = false;
         this.batch.begin();
         this.transparencia += 0.01F;
@@ -156,11 +163,12 @@ public class Main extends ApplicationAdapter {
             this.transparencia = 1.0F;
             respuesta = true;
         }
-
         this.menusprite.setAlpha(this.transparencia);
+        this.logo_sprite.setAlpha(this.transparencia);
         this.boton1sprite.setAlpha(this.transparencia);
         this.boton2sprite.setAlpha(this.transparencia);
         this.menusprite.draw(this.batch);
+        this.logo_sprite.draw(this.batch);
         this.boton1sprite.draw(this.batch);
         this.boton2sprite.draw(this.batch);
         this.batch.end();
