@@ -87,10 +87,6 @@ public class Main extends ApplicationAdapter {
 
             batch.end();
 
-            for (Muro muro : muros) {
-                muro.pintarmuro(batch);
-            }
-
             actualizarCamara();
         }
     }
