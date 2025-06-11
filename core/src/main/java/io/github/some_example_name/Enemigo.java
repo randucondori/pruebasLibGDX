@@ -42,20 +42,20 @@ public class Enemigo {
      void mover(){
         if ((int)x != (int)objetivo_x) {
             if (x < objetivo_x) {
-                x=x+0.3F;
+                x+=0.3F;
             }
 
             if ((int)x > (int)objetivo_x) {
-                x=x-0.3F;
+                x-=0.3F;
             }
         }
         if ((int)y != (int)objetivo_y) {
             if (y < objetivo_y) {
-                y=y+0.3F;
+                y+=0.3F;
             }
 
             if ((int)y > (int)objetivo_y) {
-                y=y-0.3F;
+                y-=0.3F;
             }
         }
         this.zonaseguimiento.setPosition(x+ancho/2, y+alto/2);
