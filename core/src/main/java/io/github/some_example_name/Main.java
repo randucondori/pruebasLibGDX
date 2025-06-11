@@ -136,8 +136,8 @@ public class Main extends ApplicationAdapter {
                     l.pintarLlave(batch);
                     if (l.recogerLlave(jugador)) {
                         eliminarLlave = l;
-                        System.out.println(jugador.llaves);
                     }
+                    jugador.recogerLlave(l,batch);
                 }
                 if (eliminarLlave != null) {
                     laverinto.delLlave(eliminarLlave);

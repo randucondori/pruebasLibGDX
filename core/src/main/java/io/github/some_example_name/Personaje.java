@@ -141,6 +141,12 @@ public class Personaje implements Disposable {
         this.moviendoDerecha = estado;
     }
 
+    public void recogerLlave(Llave l,SpriteBatch b){
+        BitmapFont font = new BitmapFont();
+        if(l.getArea_para_recoger().overlaps(area_jugador)){
+            font.draw(b,"Recoger Objeto con 'F'", rect.x-60,rect.y-20);
+        }
+    }
     @Override
     public void dispose() {
         playerTexture.dispose();
