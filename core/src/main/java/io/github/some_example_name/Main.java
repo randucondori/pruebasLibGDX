@@ -153,11 +153,13 @@ public class Main extends ApplicationAdapter {
             if (inicio){
                 jugador.vida = 1;
                 jugador.llaves=0;
+                transparencia_final=0;
             }
         }
     }
 
     private boolean pantallaInicio() {
+        SpriteBatch pantallasInicio_Fin = new SpriteBatch();
         this.menusprite.setSize((float) Gdx.graphics.getWidth(), (float) Gdx.graphics.getHeight());
         logo_sprite=new Sprite(logo);
         this.logo_sprite.setSize(375,175);
@@ -169,7 +171,7 @@ public class Main extends ApplicationAdapter {
         this.boton2sprite.setSize(200.0F, 100.0F);
         this.boton2sprite.translate((float) Gdx.graphics.getWidth() / 2.0F - this.boton1sprite.getWidth() / 2.0F, 25.0F);
         boolean respuesta = false;
-        this.batch.begin();
+        pantallasInicio_Fin.begin();
         this.transparencia += 0.01F;
         if (this.transparencia > 1.0F) {
             this.transparencia = 1.0F;
@@ -179,20 +181,23 @@ public class Main extends ApplicationAdapter {
         this.logo_sprite.setAlpha(this.transparencia);
         this.boton1sprite.setAlpha(this.transparencia);
         this.boton2sprite.setAlpha(this.transparencia);
-        this.menusprite.draw(this.batch);
-        this.logo_sprite.draw(this.batch);
-        this.boton1sprite.draw(this.batch);
-        this.boton2sprite.draw(this.batch);
-        this.batch.end();
+        this.menusprite.draw(pantallasInicio_Fin);
+        this.logo_sprite.draw(pantallasInicio_Fin);
+        this.boton1sprite.draw(pantallasInicio_Fin);
+        this.boton2sprite.draw(pantallasInicio_Fin);
+        pantallasInicio_Fin.end();
+        pantallasInicio_Fin.dispose();
         return respuesta;
     }
+
     private boolean pantallaFinal() {
+        SpriteBatch pantallasInicio_Fin = new SpriteBatch();
         Texture pantallaNegra = new Texture("imagenes/pantalla negra.jpg");
         menusprite=new Sprite(pantallaNegra);
         menusprite.setSize((float) Gdx.graphics.getWidth(), (float) Gdx.graphics.getHeight());
-        batch.begin();
-        menusprite.draw(batch);
-        batch.end();
+        pantallasInicio_Fin.begin();
+        menusprite.draw(pantallasInicio_Fin);
+        pantallasInicio_Fin.end();
         boolean respuesta=false;
         endsprite = new Sprite(pantallaFinal);
         endsprite.setSize((float) Gdx.graphics.getWidth(), (float) Gdx.graphics.getHeight());
@@ -212,12 +217,12 @@ public class Main extends ApplicationAdapter {
         boton1sprite.setAlpha(transparencia_final);
         boton2sprite.setAlpha(transparencia_final);
         endsprite.setAlpha(transparencia_final);
-        batch.begin();
-        endsprite.draw(batch);
-        this.boton1sprite.draw(this.batch);
-        this.boton2sprite.draw(this.batch);
-        batch.end();
-        menu();
+        pantallasInicio_Fin.begin();
+        endsprite.draw(pantallasInicio_Fin);
+        this.boton1sprite.draw(pantallasInicio_Fin);
+        this.boton2sprite.draw(pantallasInicio_Fin);
+        pantallasInicio_Fin.end();
+        pantallasInicio_Fin.dispose();
         return respuesta;
     }
 
