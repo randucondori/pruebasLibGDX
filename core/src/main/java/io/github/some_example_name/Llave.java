@@ -29,4 +29,8 @@ public class Llave {
         }
         return false;
     }
+
+    public Texture getTextura() {
+        return textura;
+    }
 }

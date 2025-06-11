@@ -143,6 +143,7 @@ public class Main extends ApplicationAdapter {
                     laverinto.delLlave(eliminarLlave);
                 }
                 batch.end();
+                jugador.pintarAtributos(llaves.get(0));
                 actualizarCamara();
             }
         }
@@ -150,7 +151,7 @@ public class Main extends ApplicationAdapter {
             inicio=false;
             menu();
             if (inicio){
-                jugador.vida = 3;
+                jugador.vida = 1;
                 jugador.llaves=0;
             }
         }

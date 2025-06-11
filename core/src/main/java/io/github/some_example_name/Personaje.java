@@ -1,7 +1,10 @@
 package io.github.some_example_name;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.MathUtils;
@@ -59,6 +62,17 @@ public class Personaje implements Disposable {
         }
 
         animacion = new Animation<>(0.5f, frames);
+    }
+
+    public void pintarAtributos(Llave l) {
+        SpriteBatch s= new SpriteBatch();
+        BitmapFont font=new BitmapFont();
+        s.begin();
+        font.draw(s,"Vidas "+this.vida+"/ 3",30, Gdx.graphics.getHeight()-10,50,50,true);
+        font.draw(s,"Llaves "+this.llaves+" / 4",Gdx.graphics.getWidth()-60,Gdx.graphics.getHeight()-10,50,50,true);
+        s.draw(playerTexture,10, Gdx.graphics.getHeight()-30,20,20);
+        s.draw(l.getTextura(),Gdx.graphics.getWidth()-80,Gdx.graphics.getHeight()-30,20,20);
+        s.end();
     }
 
     public void actualizarMovimiento(float delta, Iterable<Muro> muros, float mapaAncho, float mapaAlto) {
