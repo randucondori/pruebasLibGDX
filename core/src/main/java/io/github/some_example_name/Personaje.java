@@ -21,7 +21,7 @@ public class Personaje implements Disposable {
     private final float ancho;
     private final float alto;
 
-    public int vida = 3, llaves;
+    public int vida = 1, llaves;
 
     public Personaje(float x, float y, float ancho, float alto, float velocidad, Texture texturaInicial) {
         this.ancho = ancho;

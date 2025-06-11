@@ -1,6 +1,8 @@
 package io.github.some_example_name;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
@@ -14,6 +16,7 @@ public class Enemigo {
     Random random = new Random();
     float objetivo_x = random.nextInt(0, 2000),objetivo_y=random.nextInt(0, 2000);
     Rectangle enemigoRect;
+    int bajarvida=0;
 
 
     Enemigo(float x,float y) {
@@ -59,7 +62,7 @@ public class Enemigo {
          enemigoRect.setPosition(x+4, y);
 
     }
-     boolean reconocerArea(float mapaAncho,float mapaAlto,Personaje jugador) {
+     boolean reconocerArea(float mapaAncho,float mapaAlto,Personaje jugador){
         boolean encontrado = zonaseguimiento.overlaps(jugador.area_jugador);
         if(!encontrado) {
             enemitexture = new Texture("imagenes/enemigo.png");
@@ -69,10 +72,18 @@ public class Enemigo {
         } else{
             enemitexture = new Texture("imagenes/enemigo_2.png");
              cambiarObjetivo(jugador.rect.x, jugador.rect.y);
-            if (enemigoRect.overlaps(jugador.rect)) {
-                jugador.vida--;
-                System.out.println(jugador.vida);
-                return true;
+            if (enemigoRect.overlaps(jugador.rect )) {
+                try {
+                    jugador.vida--;
+                    if (jugador.vida - 1 <= 0) {
+                        Thread.sleep(1000);
+
+                    }
+                    System.out.println(jugador.vida);
+                    return true;
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
          }
         mover();

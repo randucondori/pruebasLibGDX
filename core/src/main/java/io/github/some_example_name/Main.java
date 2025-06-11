@@ -34,6 +34,9 @@ public class Main extends ApplicationAdapter {
     private Texture pantalladDeInicio;
     private Sprite menusprite;
     private float transparencia = 0;
+    private float transparencia_final=0;
+    private Texture pantallaFinal;
+    private Sprite endsprite;
 
     private Texture botonInicio;
     private Texture botonFin;
@@ -56,7 +59,9 @@ public class Main extends ApplicationAdapter {
         batch = new SpriteBatch();
 
         Texture texturaJugador = new Texture(Gdx.files.internal("imagenes/player.png"));
+        pantallaFinal = new Texture("imagenes/mapa.png");
         pantalladDeInicio = new Texture("imagenes/Pantalla de Inicio.png");
+        menusprite = new Sprite(this.pantalladDeInicio);
         botonInicio = new Texture("imagenes/boton_inicio.png");
         botonFin = new Texture("imagenes/boton_salir.png");
         boton1sprite = new Sprite(botonInicio);
@@ -103,49 +108,55 @@ public class Main extends ApplicationAdapter {
         Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        if (pantallaInicio()) {
+        if (pantallaInicio()&& jugador.vida != 0) {
             this.menu();
-            if (this.inicio && jugador.vida != 0) {
+            if (this.inicio) {
                 batch.setProjectionMatrix(camera.combined);
                 laverinto.pintarFondo(batch, mapaAncho, mapaAlto);
                 batch.begin();
                 for (Enemigo enemigo : enemigos) {
-                    if (enemigo.reconocerArea(mapaAncho, mapaAlto, jugador)) {
-                        jugador.rect.x = (mapaAncho - ANCHO_PERSONAJE) / 2;
-                        jugador.rect.y = (mapaAlto - ALTO_PERSONAJE) / 2;
-                        enemigos[0] = new Enemigo(0, 0);
-                        enemigos[1] = new Enemigo(0, mapaAlto);
-                        enemigos[2] = new Enemigo(mapaAncho, 0);
-                        enemigos[3] = new Enemigo(mapaAncho, mapaAlto);
-                        System.out.println(jugador.vida);
-                    }
+                        if (enemigo.reconocerArea(mapaAncho, mapaAlto, jugador)) {
+                            jugador.rect.x = (mapaAncho - ANCHO_PERSONAJE) / 2;
+                            jugador.rect.y = (mapaAlto - ALTO_PERSONAJE) / 2;
+                            enemigos[0] = new Enemigo(0, 0);
+                            enemigos[1] = new Enemigo(0, mapaAlto);
+                            enemigos[2] = new Enemigo(mapaAncho, 0);
+                            enemigos[3] = new Enemigo(mapaAncho, mapaAlto);
+                            System.out.println(jugador.vida);
+                        }
+                    enemigo.bajarvida = 0;
                     enemigo.pintarEnemigo(batch);
                     enemigo.reconocerArea(mapaAncho, mapaAlto, jugador);
                 }
                 jugador.actualizarMovimiento(Gdx.graphics.getDeltaTime() * 2f, muros, mapaAncho, mapaAlto);
                 jugador.dibujar(batch, Gdx.graphics.getDeltaTime());
 
-                Llave eliminarLlave=null;
+                Llave eliminarLlave = null;
                 for (Llave l : llaves) {
                     l.pintarLlave(batch);
-                    if (l.recogerLlave(jugador)){
+                    if (l.recogerLlave(jugador)) {
                         eliminarLlave = l;
                         System.out.println(jugador.llaves);
                     }
                 }
-                if(eliminarLlave!=null){
+                if (eliminarLlave != null) {
                     laverinto.delLlave(eliminarLlave);
                 }
                 batch.end();
                 actualizarCamara();
-            } else if (jugador.vida == 0) {
-                dispose();
+            }
+        }
+        if (jugador.vida == 0 && pantallaFinal()) {
+            inicio=false;
+            menu();
+            if (inicio){
+                jugador.vida = 3;
+                jugador.llaves=0;
             }
         }
     }
 
     private boolean pantallaInicio() {
-        this.menusprite = new Sprite(this.pantalladDeInicio);
         this.menusprite.setSize((float) Gdx.graphics.getWidth(), (float) Gdx.graphics.getHeight());
         logo_sprite=new Sprite(logo);
         this.logo_sprite.setSize(375,175);
@@ -172,6 +183,40 @@ public class Main extends ApplicationAdapter {
         this.boton1sprite.draw(this.batch);
         this.boton2sprite.draw(this.batch);
         this.batch.end();
+        return respuesta;
+    }
+    private boolean pantallaFinal() {
+        Texture pantallaNegra = new Texture("imagenes/pantalla negra.jpg");
+        menusprite=new Sprite(pantallaNegra);
+        menusprite.setSize((float) Gdx.graphics.getWidth(), (float) Gdx.graphics.getHeight());
+        batch.begin();
+        menusprite.draw(batch);
+        batch.end();
+        boolean respuesta=false;
+        endsprite = new Sprite(pantallaFinal);
+        endsprite.setSize((float) Gdx.graphics.getWidth(), (float) Gdx.graphics.getHeight());
+        Texture boton_inicio_2 = new Texture("imagenes/boton_inicio_2.png");
+        Texture boton_salir_2 = new Texture("imagenes/boton_salir_2.png");
+        this.boton1sprite = new Sprite(boton_inicio_2);
+        this.boton1sprite.setSize(200.0F, 100.0F);
+        this.boton1sprite.translate((float) Gdx.graphics.getWidth() / 2.0F - this.boton1sprite.getWidth() / 2.0F, 150.0F);
+        this.boton2sprite = new Sprite(boton_salir_2);
+        this.boton2sprite.setSize(200.0F, 100.0F);
+        this.boton2sprite.translate((float) Gdx.graphics.getWidth() / 2.0F - this.boton1sprite.getWidth() / 2.0F, 25.0F);
+        transparencia_final+=0.01F;
+        if (transparencia_final > 1.0F) {
+            transparencia_final = 1.0F;
+            respuesta=true;
+        }
+        boton1sprite.setAlpha(transparencia_final);
+        boton2sprite.setAlpha(transparencia_final);
+        endsprite.setAlpha(transparencia_final);
+        batch.begin();
+        endsprite.draw(batch);
+        this.boton1sprite.draw(this.batch);
+        this.boton2sprite.draw(this.batch);
+        batch.end();
+        menu();
         return respuesta;
     }
 
