@@ -107,7 +107,11 @@ public class Main extends ApplicationAdapter {
     public void render() {
         Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
+        Texture oscuridadTexture =  new Texture("imagenes/pantalla negra.jpg");
+        Sprite oscuridad = new Sprite(oscuridadTexture);
+        oscuridad.setAlpha(0.7555F);
+        oscuridad.setSize((float) Gdx.graphics.getWidth(), (float) Gdx.graphics.getHeight());
+        SpriteBatch oscuridad_s = new SpriteBatch();
         if (pantallaInicio()&& jugador.vida != 0) {
             this.menu();
             if (this.inicio) {
@@ -136,18 +140,21 @@ public class Main extends ApplicationAdapter {
                     l.pintarLlave(batch);
                     if (l.recogerLlave(jugador)) {
                         eliminarLlave = l;
-                        System.out.println(jugador.llaves);
                     }
+                    jugador.recogerLlave(l,batch);
                 }
                 if (eliminarLlave != null) {
                     laverinto.delLlave(eliminarLlave);
                 }
                 batch.end();
+                oscuridad_s.begin();
+                oscuridad.draw(oscuridad_s);
+                oscuridad_s.end();
                 jugador.pintarAtributos(llaves.get(0));
                 actualizarCamara();
             }
         }
-        if (jugador.vida == 0 && pantallaFinal()) {
+        if (jugador.vida <= 0 && pantallaFinal()) {
             inicio=false;
             menu();
             if (inicio){
@@ -163,7 +170,6 @@ public class Main extends ApplicationAdapter {
         this.menusprite.setSize((float) Gdx.graphics.getWidth(), (float) Gdx.graphics.getHeight());
         logo_sprite=new Sprite(logo);
         this.logo_sprite.setSize(0.5859375F*Gdx.graphics.getWidth(),0.3645833333333333F*Gdx.graphics.getHeight());
-        System.out.println( Gdx.graphics.getWidth()+" "+Gdx.graphics.getHeight());
         this.logo_sprite.translate((float) Gdx.graphics.getWidth() / 2.0F - this.logo_sprite.getWidth() / 2.0F, Gdx.graphics.getHeight()-logo_sprite.getHeight()-logo_sprite.getHeight()/10);
         this.boton1sprite = new Sprite(this.botonInicio);
         this.boton1sprite.setSize(0.3125F*Gdx.graphics.getWidth(), 0.2083333333333333F*Gdx.graphics.getHeight());

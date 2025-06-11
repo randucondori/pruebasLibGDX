@@ -33,4 +33,8 @@ public class Llave {
     public Texture getTextura() {
         return textura;
     }
+
+    public Circle getArea_para_recoger() {
+        return area_para_recoger;
+    }
 }

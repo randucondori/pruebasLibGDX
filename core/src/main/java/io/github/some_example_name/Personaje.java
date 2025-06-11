@@ -71,7 +71,7 @@ public class Personaje implements Disposable {
         font.draw(s,"Vidas "+this.vida+"/ 3",30, Gdx.graphics.getHeight()-10,50,50,true);
         font.draw(s,"Llaves "+this.llaves+" / 4",Gdx.graphics.getWidth()-60,Gdx.graphics.getHeight()-10,50,50,true);
         s.draw(playerTexture,10, Gdx.graphics.getHeight()-30,20,20);
-        s.draw(l.getTextura(),Gdx.graphics.getWidth()-80,Gdx.graphics.getHeight()-30,20,20);
+        s.draw(l.getTextura(),Gdx.graphics.getWidth()-90,Gdx.graphics.getHeight()-30,30,20);
         s.end();
     }
 
@@ -141,6 +141,12 @@ public class Personaje implements Disposable {
         this.moviendoDerecha = estado;
     }
 
+    public void recogerLlave(Llave l,SpriteBatch b){
+        BitmapFont font = new BitmapFont();
+        if(l.getArea_para_recoger().overlaps(area_jugador)){
+            font.draw(b,"Recoger Objeto con 'F'", rect.x-60,rect.y-20);
+        }
+    }
     @Override
     public void dispose() {
         playerTexture.dispose();

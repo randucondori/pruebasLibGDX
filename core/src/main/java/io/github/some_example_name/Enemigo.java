@@ -1,8 +1,6 @@
 package io.github.some_example_name;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
@@ -42,24 +40,24 @@ public class Enemigo {
      void mover(){
         if ((int)x != (int)objetivo_x) {
             if (x < objetivo_x) {
-                x+=0.3F;
+                x+=0.5F;
             }
 
             if ((int)x > (int)objetivo_x) {
-                x-=0.3F;
+                x-=0.5F;
             }
         }
         if ((int)y != (int)objetivo_y) {
             if (y < objetivo_y) {
-                y+=0.3F;
+                y+=0.5F;
             }
 
             if ((int)y > (int)objetivo_y) {
-                y-=0.3F;
+                y-=0.5F;
             }
         }
         this.zonaseguimiento.setPosition(x+ancho/2, y+alto/2);
-         enemigoRect.setPosition(x+4, y);
+         enemigoRect.setPosition(x, y);
 
     }
      boolean reconocerArea(float mapaAncho,float mapaAlto,Personaje jugador){
@@ -76,10 +74,8 @@ public class Enemigo {
                 try {
                     jugador.vida--;
                     if (jugador.vida - 1 <= 0) {
-                        Thread.sleep(1000);
-
+                        Thread.sleep(500);
                     }
-                    System.out.println(jugador.vida);
                     return true;
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
