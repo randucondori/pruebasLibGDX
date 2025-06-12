@@ -165,9 +165,8 @@ public class Main extends ApplicationAdapter {
                 jugador.vida = 3;
                 jugador.llaves = 0;
                 transparencia_final = 0;
-                for (int i = 0; i < 4; i++) {
-                    llaves.set(i,laverinto.llaves().get(i));
-                }
+                llaves.clear();
+                llaves = laverinto.llaves();
             }
         }
 
