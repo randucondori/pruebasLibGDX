@@ -34,9 +34,12 @@ public class Main extends ApplicationAdapter {
     private Texture pantalladDeInicio;
     private Sprite menusprite;
     private float transparencia = 0;
-    private float transparencia_final=0;
+    private float transparencia_final = 0;
     private Texture pantallaFinal;
     private Sprite endsprite;
+
+    private boolean muevete;
+    private boolean salir;
 
     private Texture botonInicio;
     private Texture botonFin;
@@ -67,13 +70,14 @@ public class Main extends ApplicationAdapter {
         boton1sprite = new Sprite(botonInicio);
         boton2sprite = new Sprite(botonFin);
         logo = new Texture("imagenes/logo.png");
-        logo_sprite=new Sprite(logo);
+        logo_sprite = new Sprite(logo);
+        salir = false;
 
         enemigos[0] = new Enemigo(0, 0);
         enemigos[1] = new Enemigo(0, mapaAlto);
         enemigos[2] = new Enemigo(mapaAncho, 0);
         enemigos[3] = new Enemigo(mapaAncho, mapaAlto);
-
+        muevete = false;
         jugador = new Personaje(
             (mapaAncho - ANCHO_PERSONAJE) / 2,
             (mapaAlto - ALTO_PERSONAJE) / 2,
@@ -107,32 +111,31 @@ public class Main extends ApplicationAdapter {
     public void render() {
         Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        Texture oscuridadTexture =  new Texture("imagenes/pantalla negra.jpg");
+        Texture oscuridadTexture = new Texture("imagenes/pantalla negra.jpg");
         Sprite oscuridad = new Sprite(oscuridadTexture);
         oscuridad.setAlpha(0.7555F);
         oscuridad.setSize((float) Gdx.graphics.getWidth(), (float) Gdx.graphics.getHeight());
         SpriteBatch oscuridad_s = new SpriteBatch();
-        if (pantallaInicio()&& jugador.vida != 0) {
+        if (pantallaInicio() && jugador.vida != 0) {
             this.menu();
             if (this.inicio) {
                 batch.setProjectionMatrix(camera.combined);
-                laverinto.pintarFondo(batch, mapaAncho, mapaAlto);
                 batch.begin();
+                laverinto.pintarFondo(batch, mapaAncho, mapaAlto);
                 for (Enemigo enemigo : enemigos) {
-                        if (enemigo.reconocerArea(mapaAncho, mapaAlto, jugador)) {
-                            jugador.rect.x = (mapaAncho - ANCHO_PERSONAJE) / 2;
-                            jugador.rect.y = (mapaAlto - ALTO_PERSONAJE) / 2;
-                            enemigos[0] = new Enemigo(0, 0);
-                            enemigos[1] = new Enemigo(0, mapaAlto);
-                            enemigos[2] = new Enemigo(mapaAncho, 0);
-                            enemigos[3] = new Enemigo(mapaAncho, mapaAlto);
-                            System.out.println(jugador.vida);
-                        }
+                    if (enemigo.reconocerArea(mapaAncho, mapaAlto, jugador)) {
+                        jugador.rect.x = (mapaAncho - ANCHO_PERSONAJE) / 2;
+                        jugador.rect.y = (mapaAlto - ALTO_PERSONAJE) / 2;
+                        enemigos[0] = new Enemigo(0, 0);
+                        enemigos[1] = new Enemigo(0, mapaAlto);
+                        enemigos[2] = new Enemigo(mapaAncho, 0);
+                        enemigos[3] = new Enemigo(mapaAncho, mapaAlto);
+                    }
                     enemigo.bajarvida = 0;
                     enemigo.pintarEnemigo(batch);
                     enemigo.reconocerArea(mapaAncho, mapaAlto, jugador);
                 }
-                jugador.actualizarMovimiento(Gdx.graphics.getDeltaTime() * 2f, muros, mapaAncho, mapaAlto);
+                jugador.actualizarMovimiento(Gdx.graphics.getDeltaTime() * 2f, muros, mapaAncho, mapaAlto,muevete,laverinto,salir);
                 jugador.dibujar(batch, Gdx.graphics.getDeltaTime());
 
                 Llave eliminarLlave = null;
@@ -141,7 +144,7 @@ public class Main extends ApplicationAdapter {
                     if (l.recogerLlave(jugador)) {
                         eliminarLlave = l;
                     }
-                    jugador.recogerLlave(l,batch);
+                    jugador.recogerLlave(l, batch);
                 }
                 if (eliminarLlave != null) {
                     laverinto.delLlave(eliminarLlave);
@@ -150,33 +153,35 @@ public class Main extends ApplicationAdapter {
                 oscuridad_s.begin();
                 oscuridad.draw(oscuridad_s);
                 oscuridad_s.end();
-                jugador.pintarAtributos(llaves.get(0));
+                jugador.pintarAtributos();
                 actualizarCamara();
             }
         }
+        Win(laverinto);
         if (jugador.vida <= 0 && pantallaFinal(pantallaFinal)) {
-            inicio=false;
+            inicio = false;
             menu();
-            if (inicio){
+            if (inicio) {
                 jugador.vida = 1;
-                jugador.llaves=0;
-                transparencia_final=0;
+                jugador.llaves = 0;
+                transparencia_final = 0;
             }
         }
+
     }
 
     private boolean pantallaInicio() {
         SpriteBatch pantallasInicio_Fin = new SpriteBatch();
         this.menusprite.setSize((float) Gdx.graphics.getWidth(), (float) Gdx.graphics.getHeight());
-        logo_sprite=new Sprite(logo);
-        this.logo_sprite.setSize(0.5859375F*Gdx.graphics.getWidth(),0.3645833333333333F*Gdx.graphics.getHeight());
-        this.logo_sprite.translate((float) Gdx.graphics.getWidth() / 2.0F - this.logo_sprite.getWidth() / 2.0F, Gdx.graphics.getHeight()-logo_sprite.getHeight()-logo_sprite.getHeight()/10);
+        logo_sprite = new Sprite(logo);
+        this.logo_sprite.setSize(0.5859375F * Gdx.graphics.getWidth(), 0.3645833333333333F * Gdx.graphics.getHeight());
+        this.logo_sprite.translate((float) Gdx.graphics.getWidth() / 2.0F - this.logo_sprite.getWidth() / 2.0F, Gdx.graphics.getHeight() - logo_sprite.getHeight() - logo_sprite.getHeight() / 10);
         this.boton1sprite = new Sprite(this.botonInicio);
-        this.boton1sprite.setSize(0.3125F*Gdx.graphics.getWidth(), 0.2083333333333333F*Gdx.graphics.getHeight());
-        this.boton1sprite.translate((float) Gdx.graphics.getWidth() / 2.0F - this.boton1sprite.getWidth() / 2.0F, Gdx.graphics.getHeight() / 2.0F- this.boton1sprite.getHeight());
+        this.boton1sprite.setSize(0.3125F * Gdx.graphics.getWidth(), 0.2083333333333333F * Gdx.graphics.getHeight());
+        this.boton1sprite.translate((float) Gdx.graphics.getWidth() / 2.0F - this.boton1sprite.getWidth() / 2.0F, Gdx.graphics.getHeight() / 2.0F - this.boton1sprite.getHeight());
         this.boton2sprite = new Sprite(this.botonFin);
-        this.boton2sprite.setSize(0.3125F*Gdx.graphics.getWidth(), 0.2083333333333333F*Gdx.graphics.getHeight());
-        this.boton2sprite.translate((float) Gdx.graphics.getWidth() / 2.0F - this.boton2sprite.getWidth() / 2.0F, Gdx.graphics.getHeight() / 2.0F- this.boton2sprite.getHeight()-boton1sprite.getHeight()-boton1sprite.getHeight()/4);
+        this.boton2sprite.setSize(0.3125F * Gdx.graphics.getWidth(), 0.2083333333333333F * Gdx.graphics.getHeight());
+        this.boton2sprite.translate((float) Gdx.graphics.getWidth() / 2.0F - this.boton2sprite.getWidth() / 2.0F, Gdx.graphics.getHeight() / 2.0F - this.boton2sprite.getHeight() - boton1sprite.getHeight() - boton1sprite.getHeight() / 4);
         boolean respuesta = false;
         pantallasInicio_Fin.begin();
         this.transparencia += 0.01F;
@@ -199,26 +204,26 @@ public class Main extends ApplicationAdapter {
     private boolean pantallaFinal(Texture textura_Final) {
         SpriteBatch pantallasInicio_Fin = new SpriteBatch();
         Texture pantallaNegra = new Texture("imagenes/pantalla negra.jpg");
-        menusprite=new Sprite(pantallaNegra);
+        menusprite = new Sprite(pantallaNegra);
         menusprite.setSize((float) Gdx.graphics.getWidth(), (float) Gdx.graphics.getHeight());
         pantallasInicio_Fin.begin();
         menusprite.draw(pantallasInicio_Fin);
         pantallasInicio_Fin.end();
-        boolean respuesta=false;
+        boolean respuesta = false;
         endsprite = new Sprite(textura_Final);
         endsprite.setSize((float) Gdx.graphics.getWidth(), (float) Gdx.graphics.getHeight());
         Texture boton_inicio_2 = new Texture("imagenes/boton_inicio_2.png");
         Texture boton_salir_2 = new Texture("imagenes/boton_salir_2.png");
         this.boton1sprite = new Sprite(boton_inicio_2);
-        this.boton1sprite.setSize(0.3125F*Gdx.graphics.getWidth(), 0.2083333333333333F*Gdx.graphics.getHeight());
-        this.boton1sprite.translate((float) Gdx.graphics.getWidth() / 2.0F - this.boton1sprite.getWidth() / 2.0F, Gdx.graphics.getHeight() / 2.0F- this.boton1sprite.getHeight());
+        this.boton1sprite.setSize(0.3125F * Gdx.graphics.getWidth(), 0.2083333333333333F * Gdx.graphics.getHeight());
+        this.boton1sprite.translate((float) Gdx.graphics.getWidth() / 2.0F - this.boton1sprite.getWidth() / 2.0F, Gdx.graphics.getHeight() / 2.0F - this.boton1sprite.getHeight());
         this.boton2sprite = new Sprite(boton_salir_2);
-        this.boton2sprite.setSize(0.3125F*Gdx.graphics.getWidth(), 0.2083333333333333F*Gdx.graphics.getHeight());
-        this.boton2sprite.translate((float) Gdx.graphics.getWidth() / 2.0F - this.boton2sprite.getWidth() / 2.0F, Gdx.graphics.getHeight() / 2.0F- this.boton2sprite.getHeight()-boton1sprite.getHeight()-boton1sprite.getHeight()/4);
-        transparencia_final+=0.01F;
+        this.boton2sprite.setSize(0.3125F * Gdx.graphics.getWidth(), 0.2083333333333333F * Gdx.graphics.getHeight());
+        this.boton2sprite.translate((float) Gdx.graphics.getWidth() / 2.0F - this.boton2sprite.getWidth() / 2.0F, Gdx.graphics.getHeight() / 2.0F - this.boton2sprite.getHeight() - boton1sprite.getHeight() - boton1sprite.getHeight() / 4);
+        transparencia_final += 0.01F;
         if (transparencia_final > 1.0F) {
             transparencia_final = 1.0F;
-            respuesta=true;
+            respuesta = true;
         }
         boton1sprite.setAlpha(transparencia_final);
         boton2sprite.setAlpha(transparencia_final);
@@ -292,6 +297,23 @@ public class Main extends ApplicationAdapter {
         camera.update();
     }
 
+    private void Win(Laverinto l) {
+        if (jugador.llaves == 4) {
+            salir = true;
+            if (jugador.rect.overlaps(l.getRectsalida())) {
+                //Texture texture = new Texture();
+                inicio=false;
+                muevete = true;
+                pantallaFinal(pantallaFinal);
+                if (inicio) {
+                    jugador.vida = 1;
+                    jugador.llaves = 0;
+                    transparencia_final = 0;
+                }
+            }
+        }
+    }
+
     @Override
     public void dispose() {
         batch.dispose();
@@ -300,6 +322,7 @@ public class Main extends ApplicationAdapter {
         pantalladDeInicio.dispose();
         botonInicio.dispose();
         botonFin.dispose();
+
     }
 
     @Override

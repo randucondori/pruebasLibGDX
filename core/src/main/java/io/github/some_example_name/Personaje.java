@@ -46,9 +46,9 @@ public class Personaje implements Disposable {
         int filas = 1;
 
         TextureRegion[][] regiones = TextureRegion.split(
-                playerTexture,
-                playerTexture.getWidth() / columnas,
-                playerTexture.getHeight() / filas
+            playerTexture,
+            playerTexture.getWidth() / columnas,
+            playerTexture.getHeight() / filas
         );
 
         if (regiones.length < 1 || regiones[0].length < columnas) {
@@ -63,37 +63,38 @@ public class Personaje implements Disposable {
         animacion = new Animation<>(0.25f, frames);
     }
 
-    public void pintarAtributos(Llave l) {
-        playerTexture=new Texture("imagenes/player.png");
-        SpriteBatch s= new SpriteBatch();
-        BitmapFont font=new BitmapFont();
+    public void pintarAtributos() {
+        playerTexture = new Texture("imagenes/player.png");
+        Texture l = new Texture("imagenes/llave.png");
+        SpriteBatch s = new SpriteBatch();
+        BitmapFont font = new BitmapFont();
         s.begin();
-        font.draw(s,"Vidas "+this.vida+"/ 3",30, Gdx.graphics.getHeight()-10,50,50,true);
-        font.draw(s,"Llaves "+this.llaves+" / 4",Gdx.graphics.getWidth()-60,Gdx.graphics.getHeight()-10,50,50,true);
-        s.draw(playerTexture,10, Gdx.graphics.getHeight()-30,20,20);
-        s.draw(l.getTextura(),Gdx.graphics.getWidth()-90,Gdx.graphics.getHeight()-30,30,20);
+        font.draw(s, "Vidas " + this.vida + "/ 3", 30, Gdx.graphics.getHeight() - 10, 50, 50, true);
+        font.draw(s, "Llaves " + this.llaves + " / 4", Gdx.graphics.getWidth() - 60, Gdx.graphics.getHeight() - 10, 50, 50, true);
+        s.draw(playerTexture, 10, Gdx.graphics.getHeight() - 30, 20, 20);
+        s.draw(l, Gdx.graphics.getWidth() - 90, Gdx.graphics.getHeight() - 30, 30, 20);
         s.end();
     }
 
-    public void actualizarMovimiento(float delta, Iterable<Muro> muros, float mapaAncho, float mapaAlto) {
+    public void actualizarMovimiento(float delta, Iterable<Muro> muros, float mapaAncho, float mapaAlto, boolean muevete,Laverinto l,boolean salir) {
         float oldX = rect.x;
         float oldY = rect.y;
 
-        if (moviendoArriba){
+        if (moviendoArriba && !muevete) {
             rect.y += velocidad * delta;
-            playerTexture=new Texture("imagenes/mov-detras.png");
+            playerTexture = new Texture("imagenes/mov-detras.png");
         }
-        if (moviendoAbajo){
+        if (moviendoAbajo && !muevete) {
             rect.y -= velocidad * delta;
-            playerTexture=new Texture("imagenes/mov-delante.png");
+            playerTexture = new Texture("imagenes/mov-delante.png");
         }
-        if (moviendoIzquierda){
+        if (moviendoIzquierda && !muevete) {
             rect.x -= velocidad * delta;
-            playerTexture=new Texture("imagenes/mov-perfil-izq.png");
+            playerTexture = new Texture("imagenes/mov-perfil-izq.png");
         }
-        if (moviendoDerecha){
+        if (moviendoDerecha && !muevete) {
             rect.x += velocidad * delta;
-            playerTexture=new Texture("imagenes/mov-perfil-der.png");
+            playerTexture = new Texture("imagenes/mov-perfil-der.png");
         }
         crearAnimacion();
 
@@ -106,6 +107,11 @@ public class Personaje implements Disposable {
                 break;
             }
         }*/
+        if(rect.overlaps(l.getRectsalida()) && !salir){
+            rect.x = oldX;
+            rect.y = oldY;
+            System.out.println("tocaste la salida");
+        }
 
         // Limitar a mapa
         rect.x = MathUtils.clamp(rect.x, 0, mapaAncho - rect.width);
@@ -156,12 +162,13 @@ public class Personaje implements Disposable {
         this.moviendoDerecha = estado;
     }
 
-    public void recogerLlave(Llave l,SpriteBatch b){
+    public void recogerLlave(Llave l, SpriteBatch b) {
         BitmapFont font = new BitmapFont();
-        if(l.getArea_para_recoger().overlaps(area_jugador)){
-            font.draw(b,"Recoger Objeto con 'F'", rect.x-60,rect.y-20);
+        if (l.getArea_para_recoger().overlaps(area_jugador)) {
+            font.draw(b, "Recoger Objeto con 'F'", rect.x - 60, rect.y - 20);
         }
     }
+
     @Override
     public void dispose() {
         playerTexture.dispose();

@@ -565,14 +565,10 @@ public class Laverinto {
 
     public Laverinto() {
     }
-
     public void pintarFondo(SpriteBatch batch, float alto, float ancho) {
-
-        batch.begin();
         batch.draw(texture, 0, 0, ancho, alto);
         batch.draw(salida, 970, 100, 100, 40);
-        rectsalida.set(970, 100, 80, 20);
-        batch.end();
+        rectsalida.set(970, 100, 100, 40);
     }
     public void delLlave(Llave l){
         llaves.remove(l);
@@ -583,7 +579,7 @@ public class Laverinto {
         salida.dispose();
     }
 
-
-
-
+    public Rectangle getRectsalida() {
+        return rectsalida;
+    }
 }
