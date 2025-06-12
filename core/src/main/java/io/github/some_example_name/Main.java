@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -51,6 +52,9 @@ public class Main extends ApplicationAdapter {
     private Sprite logo_sprite;
 
     private Enemigo[] enemigos = new Enemigo[4];
+    //audio
+    private Sound sound;
+    private int ya_puesto = 0;
 
     @Override
     public void create() {
@@ -72,6 +76,8 @@ public class Main extends ApplicationAdapter {
         logo = new Texture("imagenes/logo.png");
         logo_sprite = new Sprite(logo);
         salir = false;
+        //audio
+        sound = Gdx.audio.newSound(Gdx.files.internal("audio/sonidos tetricos.mp3"));
 
         enemigos[0] = new Enemigo(0, 0);
         enemigos[1] = new Enemigo(0, mapaAlto);
@@ -119,6 +125,7 @@ public class Main extends ApplicationAdapter {
         if (pantallaInicio() && jugador.vida != 0) {
             this.menu();
             if (this.inicio) {
+                reproducirmp3(sound);
                 batch.setProjectionMatrix(camera.combined);
                 batch.begin();
                 laverinto.pintarFondo(batch, mapaAncho, mapaAlto);
@@ -324,6 +331,13 @@ public class Main extends ApplicationAdapter {
                     salir=false;
                 }
             }
+        }
+    }
+    //metodo para reproducir sonido posible cambio para implementar cambios de velocidad y volumen
+    private void reproducirmp3(Sound sound){
+        if (ya_puesto < 1){
+            sound.play(0.25F);
+            ya_puesto++;
         }
     }
 
