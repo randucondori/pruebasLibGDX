@@ -154,7 +154,7 @@ public class Main extends ApplicationAdapter {
                 actualizarCamara();
             }
         }
-        if (jugador.vida <= 0 && pantallaFinal()) {
+        if (jugador.vida <= 0 && pantallaFinal(pantallaFinal)) {
             inicio=false;
             menu();
             if (inicio){
@@ -193,11 +193,10 @@ public class Main extends ApplicationAdapter {
         this.boton1sprite.draw(pantallasInicio_Fin);
         this.boton2sprite.draw(pantallasInicio_Fin);
         pantallasInicio_Fin.end();
-        pantallasInicio_Fin.dispose();
         return respuesta;
     }
 
-    private boolean pantallaFinal() {
+    private boolean pantallaFinal(Texture textura_Final) {
         SpriteBatch pantallasInicio_Fin = new SpriteBatch();
         Texture pantallaNegra = new Texture("imagenes/pantalla negra.jpg");
         menusprite=new Sprite(pantallaNegra);
@@ -206,16 +205,16 @@ public class Main extends ApplicationAdapter {
         menusprite.draw(pantallasInicio_Fin);
         pantallasInicio_Fin.end();
         boolean respuesta=false;
-        endsprite = new Sprite(pantallaFinal);
+        endsprite = new Sprite(textura_Final);
         endsprite.setSize((float) Gdx.graphics.getWidth(), (float) Gdx.graphics.getHeight());
         Texture boton_inicio_2 = new Texture("imagenes/boton_inicio_2.png");
         Texture boton_salir_2 = new Texture("imagenes/boton_salir_2.png");
         this.boton1sprite = new Sprite(boton_inicio_2);
-        this.boton1sprite.setSize(200.0F, 100.0F);
-        this.boton1sprite.translate((float) Gdx.graphics.getWidth() / 2.0F - this.boton1sprite.getWidth() / 2.0F, 150.0F);
+        this.boton1sprite.setSize(0.3125F*Gdx.graphics.getWidth(), 0.2083333333333333F*Gdx.graphics.getHeight());
+        this.boton1sprite.translate((float) Gdx.graphics.getWidth() / 2.0F - this.boton1sprite.getWidth() / 2.0F, Gdx.graphics.getHeight() / 2.0F- this.boton1sprite.getHeight());
         this.boton2sprite = new Sprite(boton_salir_2);
-        this.boton2sprite.setSize(200.0F, 100.0F);
-        this.boton2sprite.translate((float) Gdx.graphics.getWidth() / 2.0F - this.boton1sprite.getWidth() / 2.0F, 25.0F);
+        this.boton2sprite.setSize(0.3125F*Gdx.graphics.getWidth(), 0.2083333333333333F*Gdx.graphics.getHeight());
+        this.boton2sprite.translate((float) Gdx.graphics.getWidth() / 2.0F - this.boton2sprite.getWidth() / 2.0F, Gdx.graphics.getHeight() / 2.0F- this.boton2sprite.getHeight()-boton1sprite.getHeight()-boton1sprite.getHeight()/4);
         transparencia_final+=0.01F;
         if (transparencia_final > 1.0F) {
             transparencia_final = 1.0F;
@@ -229,7 +228,6 @@ public class Main extends ApplicationAdapter {
         this.boton1sprite.draw(pantallasInicio_Fin);
         this.boton2sprite.draw(pantallasInicio_Fin);
         pantallasInicio_Fin.end();
-        pantallasInicio_Fin.dispose();
         return respuesta;
     }
 

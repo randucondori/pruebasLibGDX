@@ -36,7 +36,6 @@ public class Personaje implements Disposable {
         this.area_jugador.setRadius(ancho * 2);
         rect = new Rectangle(x, y, ancho, alto);
         tiempo = 0f;
-        crearAnimacion();
 
         moviendoArriba = moviendoAbajo = moviendoIzquierda = moviendoDerecha = false;
 
@@ -61,10 +60,11 @@ public class Personaje implements Disposable {
             frames[i] = regiones[0][i];
         }
 
-        animacion = new Animation<>(0.5f, frames);
+        animacion = new Animation<>(0.25f, frames);
     }
 
     public void pintarAtributos(Llave l) {
+        playerTexture=new Texture("imagenes/player.png");
         SpriteBatch s= new SpriteBatch();
         BitmapFont font=new BitmapFont();
         s.begin();
@@ -79,10 +79,24 @@ public class Personaje implements Disposable {
         float oldX = rect.x;
         float oldY = rect.y;
 
-        if (moviendoArriba) rect.y += velocidad * delta;
-        if (moviendoAbajo) rect.y -= velocidad * delta;
-        if (moviendoIzquierda) rect.x -= velocidad * delta;
-        if (moviendoDerecha) rect.x += velocidad * delta;
+        if (moviendoArriba){
+            rect.y += velocidad * delta;
+            playerTexture=new Texture("imagenes/mov-detras.png");
+        }
+        if (moviendoAbajo){
+            rect.y -= velocidad * delta;
+            playerTexture=new Texture("imagenes/mov-delante.png");
+        }
+        if (moviendoIzquierda){
+            rect.x -= velocidad * delta;
+            playerTexture=new Texture("imagenes/mov-perfil-izq.png");
+        }
+        if (moviendoDerecha){
+            rect.x += velocidad * delta;
+            playerTexture=new Texture("imagenes/mov-perfil-der.png");
+        }
+        crearAnimacion();
+
 
         /*for (Muro m : muros) {
             if (rect.overlaps(m.getRectangle())) {
@@ -106,6 +120,7 @@ public class Personaje implements Disposable {
             jugadorframe = animacion.getKeyFrame(tiempo, true);
             batch.draw(jugadorframe, rect.x, rect.y, rect.width, rect.height);
         } else {
+            playerTexture = new Texture("imagenes/player.png");
             batch.draw(playerTexture, rect.x, rect.y, rect.width, rect.height);
         }
     }
