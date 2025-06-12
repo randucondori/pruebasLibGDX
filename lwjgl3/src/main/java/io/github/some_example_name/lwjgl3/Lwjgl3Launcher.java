@@ -17,12 +17,12 @@ public class Lwjgl3Launcher {
 
     private static Lwjgl3ApplicationConfiguration getDefaultConfiguration() {
         Lwjgl3ApplicationConfiguration configuration = new Lwjgl3ApplicationConfiguration();
-        configuration.setTitle("angelo");
+        configuration.setTitle("The Maze Monster");
         configuration.useVsync(true);
         configuration.setForegroundFPS(Lwjgl3ApplicationConfiguration.getDisplayMode().refreshRate + 1);
         configuration.setWindowedMode(640, 480);
-        //configuration.setResizable(false);
-        configuration.setWindowIcon("libgdx128.png", "libgdx64.png", "libgdx32.png", "libgdx16.png");
+        configuration.setResizable(false);
+        configuration.setWindowIcon("imagenes/logo.png", "imagenes/logo.png", "imagenes/logo.png", "imagenes/logo.png");
         return configuration;
     }
 }

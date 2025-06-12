@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -16,69 +17,82 @@ import com.badlogic.gdx.math.Vector3;
 import java.util.ArrayList;
 
 public class Main extends ApplicationAdapter {
-
+    //camara y pantalla
     private OrthographicCamera camera;
     private SpriteBatch batch;
-
+    //jugador y estadisticas
     private Personaje jugador;
     private final float ANCHO_PERSONAJE = 25f;
     private final float ALTO_PERSONAJE = 25f;
     private final float velocidad = 100f;
-
+    private Texture texturaJugador;
+    //materiales de laverinto y mapa
     private Laverinto laverinto;
     private ArrayList<Muro> muros;
     private ArrayList<Llave> llaves = new ArrayList<>();
     private float mapaAncho = 2000;
     private float mapaAlto = 2000;
     private Vector3 objetivoCamara;
-
+    //textura de visctoria y muerte pantalla de incio
+    private Texture win;
+    private Texture muerte;
     private Texture pantalladDeInicio;
+    //pantalla para el menu y atributos de estilo
     private Sprite menusprite;
     private float transparencia = 0;
     private float transparencia_final = 0;
     private Texture pantallaFinal;
     private Sprite endsprite;
-
+    //variables de estado para el personaje
     private boolean muevete;
     private boolean salir;
-
+    //variables y Texturas para la pantalla de Fin
     private Texture botonInicio;
     private Texture botonFin;
     private Sprite boton1sprite;
     private Sprite boton2sprite;
     private boolean inicio;
-
+    //Textura de logo
     private Texture logo;
     private Sprite logo_sprite;
-
+    //Enemigos de mapa
     private Enemigo[] enemigos = new Enemigo[4];
-    //audio
-    private Sound sound;
+    //audio y musica
+    private Music musicJuego;
+    private Music musicaInicio;
+    private Music musicaFinalMuerte;
+    private Music musicaFinalWin;
     private int ya_puesto = 0;
+
+    //variables de audio y musica
+    private boolean reproducir;
 
     @Override
     public void create() {
-        objetivoCamara = new Vector3();
-
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
-        batch = new SpriteBatch();
-
-        Texture texturaJugador = new Texture(Gdx.files.internal("imagenes/player.png"));
+        win = new Texture("imagenes/win.png");
+        muerte = new Texture("imagenes/muerto.png");
+        texturaJugador = new Texture(Gdx.files.internal("imagenes/player.png"));
         pantallaFinal = new Texture("imagenes/mapa.png");
         pantalladDeInicio = new Texture("imagenes/Pantalla de Inicio.png");
-        menusprite = new Sprite(this.pantalladDeInicio);
         botonInicio = new Texture("imagenes/boton_inicio.png");
         botonFin = new Texture("imagenes/boton_salir.png");
+        logo = new Texture("imagenes/logo.png");
+        menusprite = new Sprite(this.pantalladDeInicio);
+        objetivoCamara = new Vector3();
+        batch = new SpriteBatch();
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         boton1sprite = new Sprite(botonInicio);
         boton2sprite = new Sprite(botonFin);
-        logo = new Texture("imagenes/logo.png");
+
         logo_sprite = new Sprite(logo);
         salir = false;
+        reproducir = true;
         //audio
-        sound = Gdx.audio.newSound(Gdx.files.internal("audio/sonidos tetricos.mp3"));
-
+        musicJuego = Gdx.audio.newMusic(Gdx.files.internal("audio/sonidos tetricos.mp3"));
+        musicaInicio = Gdx.audio.newMusic(Gdx.files.internal("audio/inicio.mp3"));
+        musicaFinalMuerte = Gdx.audio.newMusic(Gdx.files.internal("audio/muerto.mp3"));
+        musicaFinalWin = Gdx.audio.newMusic(Gdx.files.internal("audio/win.mp3"));
         enemigos[0] = new Enemigo(0, 0);
         enemigos[1] = new Enemigo(0, mapaAlto);
         enemigos[2] = new Enemigo(mapaAncho, 0);
@@ -92,11 +106,9 @@ public class Main extends ApplicationAdapter {
             velocidad,
             texturaJugador
         );
-
         laverinto = new Laverinto();
         muros = laverinto.Muros();
         llaves = laverinto.llaves();
-
         configurarControles();
         actualizarCamara();
     }
@@ -125,7 +137,9 @@ public class Main extends ApplicationAdapter {
         if (pantallaInicio() && jugador.vida != 0) {
             this.menu();
             if (this.inicio) {
-                reproducirmp3(sound);
+                musicaInicio.stop();
+                musicJuego.play();
+                musicJuego.setLooping(reproducir);
                 batch.setProjectionMatrix(camera.combined);
                 batch.begin();
                 laverinto.pintarFondo(batch, mapaAncho, mapaAlto);
@@ -142,7 +156,7 @@ public class Main extends ApplicationAdapter {
                     enemigo.pintarEnemigo(batch);
                     enemigo.reconocerArea(mapaAncho, mapaAlto, jugador);
                 }
-                jugador.actualizarMovimiento(Gdx.graphics.getDeltaTime() * 2f, muros, mapaAncho, mapaAlto,muevete,laverinto,salir);
+                jugador.actualizarMovimiento(Gdx.graphics.getDeltaTime() * 2f, muros, mapaAncho, mapaAlto, muevete, laverinto, salir);
                 jugador.dibujar(batch, Gdx.graphics.getDeltaTime());
 
                 Llave eliminarLlave = null;
@@ -165,15 +179,22 @@ public class Main extends ApplicationAdapter {
             }
         }
         Win(laverinto);
-        if (jugador.vida <= 0 && pantallaFinal(pantallaFinal)) {
+        if (jugador.vida <= 0 && pantallaFinal(pantallaFinal, muerte)) {
             inicio = false;
+            reproducir = false;
+            musicJuego.stop();
             menu();
+            musicaInicio.stop();
+            musicaFinalMuerte.play();
+            musicaFinalMuerte.setLooping(true);
             if (inicio) {
+                musicaFinalMuerte.stop();
                 jugador.vida = 3;
                 jugador.llaves = 0;
                 transparencia_final = 0;
                 llaves.clear();
                 llaves = laverinto.llaves();
+                muerte.dispose();
             }
         }
 
@@ -181,6 +202,8 @@ public class Main extends ApplicationAdapter {
 
     private boolean pantallaInicio() {
         SpriteBatch pantallasInicio_Fin = new SpriteBatch();
+        musicaInicio.play();
+        musicaInicio.setLooping(true);
         this.menusprite.setSize((float) Gdx.graphics.getWidth(), (float) Gdx.graphics.getHeight());
         logo_sprite = new Sprite(logo);
         this.logo_sprite.setSize(0.5859375F * Gdx.graphics.getWidth(), 0.3645833333333333F * Gdx.graphics.getHeight());
@@ -211,7 +234,7 @@ public class Main extends ApplicationAdapter {
         return respuesta;
     }
 
-    private boolean pantallaFinal(Texture textura_Final) {
+    private boolean pantallaFinal(Texture textura_Final, Texture texture) {
         SpriteBatch pantallasInicio_Fin = new SpriteBatch();
         Texture pantallaNegra = new Texture("imagenes/pantalla negra.jpg");
         menusprite = new Sprite(pantallaNegra);
@@ -242,6 +265,8 @@ public class Main extends ApplicationAdapter {
         endsprite.draw(pantallasInicio_Fin);
         this.boton1sprite.draw(pantallasInicio_Fin);
         this.boton2sprite.draw(pantallasInicio_Fin);
+        pantallasInicio_Fin.draw(texture, 100,
+            Gdx.graphics.getHeight() - 220, 450, 200);
         pantallasInicio_Fin.end();
         return respuesta;
     }
@@ -263,6 +288,18 @@ public class Main extends ApplicationAdapter {
                     case Input.Keys.RIGHT:
                         jugador.setMoviendoDerecha(true);
                         break;
+                    case Input.Keys.W:
+                        jugador.setMoviendoArriba(true);
+                        break;
+                    case Input.Keys.S:
+                        jugador.setMoviendoAbajo(true);
+                        break;
+                    case Input.Keys.A:
+                        jugador.setMoviendoIzquierda(true);
+                        break;
+                    case Input.Keys.D:
+                        jugador.setMoviendoDerecha(true);
+                        break;
                 }
                 return true;
             }
@@ -280,6 +317,18 @@ public class Main extends ApplicationAdapter {
                         jugador.setMoviendoIzquierda(false);
                         break;
                     case Input.Keys.RIGHT:
+                        jugador.setMoviendoDerecha(false);
+                        break;
+                    case Input.Keys.W:
+                        jugador.setMoviendoArriba(false);
+                        break;
+                    case Input.Keys.S:
+                        jugador.setMoviendoAbajo(false);
+                        break;
+                    case Input.Keys.A:
+                        jugador.setMoviendoIzquierda(false);
+                        break;
+                    case Input.Keys.D:
                         jugador.setMoviendoDerecha(false);
                         break;
                 }
@@ -311,12 +360,16 @@ public class Main extends ApplicationAdapter {
         if (jugador.llaves == 4) {
             salir = true;
             if (jugador.rect.overlaps(l.getRectsalida())) {
-                //Texture texture = new Texture();
-                inicio=false;
+                inicio = false;
                 muevete = true;
-                pantallaFinal(pantallaFinal);
+                pantallaFinal(pantallaFinal, win);
                 menu();
+                musicaInicio.stop();
+                musicJuego.stop();
+                musicaFinalWin.play();
+                musicaFinalWin.setLooping(true);
                 if (inicio) {
+                    musicaFinalWin.stop();
                     jugador.vida = 3;
                     jugador.llaves = 0;
                     transparencia_final = 0;
@@ -326,16 +379,18 @@ public class Main extends ApplicationAdapter {
                     enemigos[1] = new Enemigo(0, mapaAlto);
                     enemigos[2] = new Enemigo(mapaAncho, 0);
                     enemigos[3] = new Enemigo(mapaAncho, mapaAlto);
-                    llaves=laverinto.llaves();
-                    muevete=false;
-                    salir=false;
+                    llaves = laverinto.llaves();
+                    muevete = false;
+                    salir = false;
+                    win.dispose();
                 }
             }
         }
     }
+
     //metodo para reproducir sonido posible cambio para implementar cambios de velocidad y volumen
-    private void reproducirmp3(Sound sound){
-        if (ya_puesto < 1){
+    private void reproducirmp3(Sound sound) {
+        if (ya_puesto < 1) {
             sound.play(0.25F);
             ya_puesto++;
         }
@@ -353,6 +408,12 @@ public class Main extends ApplicationAdapter {
         for (Enemigo enemigo : enemigos) {
             enemigo.dispose();
         }
+        win.dispose();
+        muerte.dispose();
+        musicJuego.dispose();
+        musicaFinalWin.dispose();
+        musicaFinalMuerte.dispose();
+        musicaInicio.dispose();
 
     }
 

@@ -1,6 +1,7 @@
 package io.github.some_example_name;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -22,7 +23,6 @@ public class Personaje implements Disposable {
     public Circle area_jugador;
     private SpriteBatch s = new SpriteBatch();
     private BitmapFont font = new BitmapFont();
-
     private final float ancho;
     private final float alto;
 
@@ -38,9 +38,7 @@ public class Personaje implements Disposable {
         this.area_jugador.setRadius(ancho * 2);
         rect = new Rectangle(x, y, ancho, alto);
         tiempo = 0f;
-
         moviendoArriba = moviendoAbajo = moviendoIzquierda = moviendoDerecha = false;
-
     }
 
     private void crearAnimacion() {
@@ -93,12 +91,12 @@ public class Personaje implements Disposable {
             playerTexture = new Texture("imagenes/mov-perfil-izq.png");
         }
         if (moviendoDerecha && !muevete) {
+
             rect.x += velocidad * delta;
             playerTexture = new Texture("imagenes/mov-perfil-der.png");
+
         }
         crearAnimacion();
-
-
         /*for (Muro m : muros) {
             if (rect.overlaps(m.getRectangle())) {
                 rect.x = oldX;
@@ -131,13 +129,6 @@ public class Personaje implements Disposable {
 
     public boolean hayMovimiento() {
         return moviendoArriba || moviendoAbajo || moviendoIzquierda || moviendoDerecha;
-    }
-
-    public void setMovimiento(boolean arriba, boolean abajo, boolean izquierda, boolean derecha) {
-        this.moviendoArriba = arriba;
-        this.moviendoAbajo = abajo;
-        this.moviendoIzquierda = izquierda;
-        this.moviendoDerecha = derecha;
     }
 
     public Rectangle getRect() {
