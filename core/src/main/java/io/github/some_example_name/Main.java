@@ -165,6 +165,7 @@ public class Main extends ApplicationAdapter {
                 jugador.vida = 1;
                 jugador.llaves = 0;
                 transparencia_final = 0;
+                llaves=laverinto.llaves();
             }
         }
 
@@ -305,10 +306,20 @@ public class Main extends ApplicationAdapter {
                 inicio=false;
                 muevete = true;
                 pantallaFinal(pantallaFinal);
+                menu();
                 if (inicio) {
                     jugador.vida = 1;
                     jugador.llaves = 0;
                     transparencia_final = 0;
+                    jugador.rect.x = (mapaAncho - ANCHO_PERSONAJE) / 2;
+                    jugador.rect.y = (mapaAlto - ALTO_PERSONAJE) / 2;
+                    enemigos[0] = new Enemigo(0, 0);
+                    enemigos[1] = new Enemigo(0, mapaAlto);
+                    enemigos[2] = new Enemigo(mapaAncho, 0);
+                    enemigos[3] = new Enemigo(mapaAncho, mapaAlto);
+                    llaves=laverinto.llaves();
+                    muevete=false;
+                    salir=false;
                 }
             }
         }
