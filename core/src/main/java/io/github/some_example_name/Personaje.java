@@ -20,6 +20,8 @@ public class Personaje implements Disposable {
     private float tiempo;
     private boolean moviendoArriba, moviendoAbajo, moviendoIzquierda, moviendoDerecha;
     public Circle area_jugador;
+    private SpriteBatch s = new SpriteBatch();
+    private BitmapFont font = new BitmapFont();
 
     private final float ancho;
     private final float alto;
@@ -66,8 +68,6 @@ public class Personaje implements Disposable {
     public void pintarAtributos() {
         playerTexture = new Texture("imagenes/player.png");
         Texture l = new Texture("imagenes/llave.png");
-        SpriteBatch s = new SpriteBatch();
-        BitmapFont font = new BitmapFont();
         s.begin();
         font.draw(s, "Vidas " + this.vida + "/ 3", 30, Gdx.graphics.getHeight() - 10, 50, 50, true);
         font.draw(s, "Llaves " + this.llaves + " / 4", Gdx.graphics.getWidth() - 60, Gdx.graphics.getHeight() - 10, 50, 50, true);
@@ -172,6 +172,9 @@ public class Personaje implements Disposable {
     @Override
     public void dispose() {
         playerTexture.dispose();
+        s.dispose();
+        font.dispose();
+
     }
 }
 
