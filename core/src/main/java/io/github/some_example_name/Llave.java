@@ -33,4 +33,7 @@ public class Llave {
     public Circle getArea_para_recoger() {
         return area_para_recoger;
     }
+    public void dispose(){
+        textura.dispose();
+    }
 }

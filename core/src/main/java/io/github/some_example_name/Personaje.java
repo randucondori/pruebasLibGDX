@@ -26,7 +26,7 @@ public class Personaje implements Disposable {
     private final float ancho;
     private final float alto;
 
-    public int vida = 1, llaves;
+    public int vida = 3, llaves;
 
     public Personaje(float x, float y, float ancho, float alto, float velocidad, Texture texturaInicial) {
         this.ancho = ancho;
@@ -103,14 +103,12 @@ public class Personaje implements Disposable {
             if (rect.overlaps(m.getRectangle())) {
                 rect.x = oldX;
                 rect.y = oldY;
-                System.out.println("tocaste un muro");
                 break;
             }
         }*/
         if(rect.overlaps(l.getRectsalida()) && !salir){
             rect.x = oldX;
             rect.y = oldY;
-            System.out.println("tocaste la salida");
         }
 
         // Limitar a mapa
@@ -174,7 +172,7 @@ public class Personaje implements Disposable {
         playerTexture.dispose();
         s.dispose();
         font.dispose();
-
+        playerTexture.dispose();
     }
 }
 

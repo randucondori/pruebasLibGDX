@@ -85,4 +85,7 @@ public class Enemigo {
         mover();
         return false;
     }
+    public void dispose(){
+        enemitexture.dispose();
+    }
 }

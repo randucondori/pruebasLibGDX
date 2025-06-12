@@ -162,10 +162,12 @@ public class Main extends ApplicationAdapter {
             inicio = false;
             menu();
             if (inicio) {
-                jugador.vida = 1;
+                jugador.vida = 3;
                 jugador.llaves = 0;
                 transparencia_final = 0;
-                llaves=laverinto.llaves();
+                for (int i = 0; i < 4; i++) {
+                    llaves.set(i,laverinto.llaves().get(i));
+                }
             }
         }
 
@@ -199,6 +201,7 @@ public class Main extends ApplicationAdapter {
         this.boton1sprite.draw(pantallasInicio_Fin);
         this.boton2sprite.draw(pantallasInicio_Fin);
         pantallasInicio_Fin.end();
+        pantallasInicio_Fin.dispose();
         return respuesta;
     }
 
@@ -308,7 +311,7 @@ public class Main extends ApplicationAdapter {
                 pantallaFinal(pantallaFinal);
                 menu();
                 if (inicio) {
-                    jugador.vida = 1;
+                    jugador.vida = 3;
                     jugador.llaves = 0;
                     transparencia_final = 0;
                     jugador.rect.x = (mapaAncho - ANCHO_PERSONAJE) / 2;
@@ -333,6 +336,10 @@ public class Main extends ApplicationAdapter {
         pantalladDeInicio.dispose();
         botonInicio.dispose();
         botonFin.dispose();
+        jugador.dispose();
+        for (Enemigo enemigo : enemigos) {
+            enemigo.dispose();
+        }
 
     }
 

@@ -572,6 +572,7 @@ public class Laverinto {
     }
     public void delLlave(Llave l){
         llaves.remove(l);
+        l.dispose();
     }
 
     public void dispoce() {
