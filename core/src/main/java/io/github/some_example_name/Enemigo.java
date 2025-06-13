@@ -22,7 +22,7 @@ public class Enemigo {
         this.y = y;
         this.zonaseguimiento = new Circle();
         this.zonaseguimiento.setPosition(x+ancho/2, y+alto/2);
-        this.zonaseguimiento.setRadius(120);
+        this.zonaseguimiento.setRadius(140);
         this.enemigoRect = new Rectangle();
         this.alto = 20;
         this.ancho = 20;
@@ -38,22 +38,23 @@ public class Enemigo {
         batch.draw(enemitexture, x, y, ancho, alto);
     }
      void mover(){
+        float velocidad = 1f;
         if ((int)x != (int)objetivo_x) {
             if (x < objetivo_x) {
-                x+=0.5F;
+                x+= velocidad;
             }
 
             if ((int)x > (int)objetivo_x) {
-                x-=0.5F;
+                x-= velocidad;
             }
         }
         if ((int)y != (int)objetivo_y) {
             if (y < objetivo_y) {
-                y+=0.5F;
+                y+= velocidad;
             }
 
             if ((int)y > (int)objetivo_y) {
-                y-=0.5F;
+                y-= velocidad;
             }
         }
         this.zonaseguimiento.setPosition(x+ancho/2, y+alto/2);
