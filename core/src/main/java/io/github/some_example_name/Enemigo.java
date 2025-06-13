@@ -61,6 +61,8 @@ public class Enemigo {
 
     }
      boolean reconocerArea(float mapaAncho,float mapaAlto,Personaje jugador){
+        float oldx = this.x;
+        float oldy = this.y;
         boolean encontrado = zonaseguimiento.overlaps(jugador.area_jugador);
         if(!encontrado) {
             enemitexture = new Texture("imagenes/enemigo.png");
@@ -72,6 +74,8 @@ public class Enemigo {
              cambiarObjetivo(jugador.rect.x, jugador.rect.y);
             if (enemigoRect.overlaps(jugador.rect )) {
                 try {
+                    oldy = enemigoRect.y;
+                    oldx = enemigoRect.x;
                     jugador.vida--;
                     if (jugador.vida - 1 <= 0) {
                         Thread.sleep(500);

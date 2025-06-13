@@ -15,7 +15,7 @@ public class Llave {
     public Llave(float x, float y) {
         this.x = x;
         this.y = y;
-        area_para_recoger = new Circle(x + ancho / 2, y + alto / 2, 30);
+        area_para_recoger = new Circle(x + ancho / 2, y + alto / 2, 3);
     }
 
     public void pintarLlave(SpriteBatch batch) {

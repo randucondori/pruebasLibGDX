@@ -62,7 +62,6 @@ public class Main extends ApplicationAdapter {
     private Music musicaInicio;
     private Music musicaFinalMuerte;
     private Music musicaFinalWin;
-    private int ya_puesto = 0;
 
     //variables de audio y musica
     private boolean reproducir;
@@ -385,14 +384,6 @@ public class Main extends ApplicationAdapter {
                     win.dispose();
                 }
             }
-        }
-    }
-
-    //metodo para reproducir sonido posible cambio para implementar cambios de velocidad y volumen
-    private void reproducirmp3(Sound sound) {
-        if (ya_puesto < 1) {
-            sound.play(0.25F);
-            ya_puesto++;
         }
     }
 

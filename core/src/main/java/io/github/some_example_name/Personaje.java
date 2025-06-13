@@ -97,13 +97,13 @@ public class Personaje implements Disposable {
 
         }
         crearAnimacion();
-        /*for (Muro m : muros) {
+        for (Muro m : muros) {
             if (rect.overlaps(m.getRectangle())) {
                 rect.x = oldX;
                 rect.y = oldY;
                 break;
             }
-        }*/
+        }
         if(rect.overlaps(l.getRectsalida()) && !salir){
             rect.x = oldX;
             rect.y = oldY;
